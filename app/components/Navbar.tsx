@@ -6,8 +6,6 @@ import Google from "next-auth/providers/google";
 import { redirect } from "next/dist/server/api-utils";
 
 const Navbar = async () => {
-  const GOOGLE_CLIENT_ID = process.env.AUTH_GOOGLE_ID!;
-  const GOOGLE_CLIENT_SECRET = process.env.AUTH_GOOGLE_SECRET!;
   const session = await auth();
 
   return (
