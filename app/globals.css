@@ -205,6 +205,19 @@
   .category-tag {
     @apply font-medium text-[16px] px-4 py-2 rounded-full;
   }
+
+  .pattern {
+    background-image: linear-gradient(
+            to right,
+            transparent 49.5%,
+            rgba(251, 232, 67, 0.2) 49.5%,
+            rgba(251, 232, 67, 0.6) 50.5%,
+            transparent 50.5%
+    );
+    background-size: 5% 100%;
+    background-position: center;
+    background-repeat: repeat-x;
+  }
 }
 
 body {
