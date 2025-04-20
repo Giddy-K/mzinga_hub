@@ -180,6 +180,10 @@
   .startup-form_textarea {
     @apply border-[3px] border-black p-5 text-[18px] text-black font-semibold rounded-[20px] mt-3;
   }
+
+  .startup-form_error {
+    @apply text-red-500 mt-2 ml-5;
+  }
 }
 
 body {
