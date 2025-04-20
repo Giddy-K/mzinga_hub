@@ -230,3 +230,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-work-sans);
 }
+
+.w-md-editor-toolbar {
+  padding: 10px !important;
+}
