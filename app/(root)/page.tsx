@@ -7,6 +7,7 @@
 // bg-primary, shadow-100 = .profile_card
 // shadow-100 = .profile_title
 // !important = .avatar
+// !important = .dropdown-menu
 
 export default function Home() {
   return (
