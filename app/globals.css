@@ -14,7 +14,7 @@
 
 @layer components {
   .font-work-sans {
-    font-family: var(--font-work-sans), sans-serif;
+    font-family: var(--font-work-sans);
   }
 }
 
