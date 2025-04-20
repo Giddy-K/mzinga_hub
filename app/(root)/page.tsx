@@ -8,7 +8,7 @@
 // shadow-100 = .profile_title
 // !important = .avatar
 // !important = .dropdown-menu
-// !important = .login
+// !important, shadow-100 = .login
 
 export default function Home() {
   return (
