@@ -119,7 +119,7 @@
   }
 
   .dropdown-menu {
-    @apply w-56 border-[5px] border-black bg-white p-5 rounded-2xl !important;
+    @apply w-56 border-[5px] border-black bg-white p-5 rounded-2xl;
   }
 
 }
