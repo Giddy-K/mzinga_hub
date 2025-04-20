@@ -17,7 +17,7 @@
 // !important, bg-black-200 = .startup-card_btn
 //  !important, placeholder:text-black-300 = .startup-form_input
 //  !important, placeholder:text-black-300 = .startup-form_textarea
-// !important = .startup-form_editor
+// !important, placeholder:text-black-300 = .startup-form_editor
 
 export default function Home() {
   return (
