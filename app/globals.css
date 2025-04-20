@@ -184,6 +184,12 @@
   .startup-form_error {
     @apply text-red-500 mt-2 ml-5;
   }
+
+  .startup-form_editor {
+    @apply mt-3 border-[3px] border-black text-[18px] text-black font-semibold placeholder:text-black-300 !important;
+  }
+
+  
 }
 
 body {
