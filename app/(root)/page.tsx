@@ -6,6 +6,8 @@
 // text-black-100 = .no-result
 // bg-primary, shadow-100 = .profile_card
 // shadow-100 = .profile_title
+// !important = .avatar
+
 export default function Home() {
   return (
     <>
