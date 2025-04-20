@@ -51,6 +51,10 @@
     @apply font-medium text-[16px] text-black;
   }
 
+  .text-14-normal {
+    @apply font-normal text-sm text-white-100/80;
+  }
+
   .heading {
     @apply bg-transparent px-7 py-50 font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-center my-5;
   }
