@@ -15,6 +15,7 @@
 // bg-primary-100, group-hover:bg-white-100 = .startup-card_date
 // text-black-100 = .startup-card_desc
 // !important, bg-black-200 = .startup-card_btn
+//  !important = .startup-form_input
 
 export default function Home() {
   return (
