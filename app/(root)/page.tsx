@@ -16,6 +16,7 @@
 // text-black-100 = .startup-card_desc
 // !important, bg-black-200 = .startup-card_btn
 //  !important, placeholder:text-black-300 = .startup-form_input
+//  !important = .startup-form_textarea
 
 export default function Home() {
   return (
