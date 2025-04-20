@@ -11,6 +11,7 @@
 // !important, shadow-100, font-work-sans = .login
 // placeholder:text-black-100 = .search-input
 // !important = .search-btn
+
 export default function Home() {
   return (
     <>
