@@ -9,6 +9,7 @@
 // !important = .avatar
 // !important = .dropdown-menu
 // !important, shadow-100, font-work-sans = .login
+// placeholder:text-black-100 = .search-input
 
 export default function Home() {
   return (
