@@ -104,6 +104,11 @@
     @apply rounded-full object-cover border-[3px] border-black;
   }
 
+  /* idea details */
+  .divider {
+    @apply border-dotted bg-zinc-400 max-w-4xl my-10 mx-auto;
+  }
+
 }
 
 body {
