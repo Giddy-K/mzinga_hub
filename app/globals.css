@@ -122,6 +122,11 @@
     @apply w-56 border-[5px] border-black bg-white p-5 rounded-2xl;
   }
 
+  .login {
+    @apply border-[5px] py-4 border-black bg-white text-black relative shadow-100 font-work-sans font-medium hover:shadow-none transition-all duration-500 !important;
+  }
+
+
 }
 
 body {
