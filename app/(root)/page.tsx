@@ -1,3 +1,10 @@
+//TODO
+// css:
+// text-white-100/80 = .text-14-normal
+// pattern, bg-primary = .pink_container
+// tag-tri, bg-secondary, font-work-sans = .tag
+//  = 
+
 export default function Home() {
   return (
     <>
