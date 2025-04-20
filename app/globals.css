@@ -108,10 +108,16 @@
   .divider {
     @apply border-dotted bg-zinc-400 max-w-4xl my-10 mx-auto;
   }
-  
+
   .view_skeleton {
     @apply bg-zinc-400 h-10 w-24 rounded-lg fixed bottom-3 right-3;
   }
+
+  /* navbar */
+  .avatar {
+    @apply p-0 focus-visible:ring-0 bg-none rounded-full drop-shadow-md !important;
+  }
+
 }
 
 body {
