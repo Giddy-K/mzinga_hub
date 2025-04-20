@@ -12,7 +12,7 @@
 // placeholder:text-black-100 = .search-input
 // !important = .search-btn
 // shadow-200, hover:shadow-300, hover:bg-primary-100, hover:border-primary = .startup-card
-// bg-primary-100 = .startup-card_date
+// bg-primary-100, group-hover:bg-white-100 = .startup-card_date
 
 export default function Home() {
   return (
