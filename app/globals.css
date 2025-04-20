@@ -159,6 +159,10 @@
   .startup-card_btn {
     @apply rounded-full font-medium text-[16px] text-white px-5 py-3;
   }
+
+  .startup-card_skeleton {
+    @apply w-full h-96 rounded-[22px] bg-zinc-400;
+  }
 }
 
 body {
