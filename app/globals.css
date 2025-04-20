@@ -186,10 +186,10 @@
   }
 
   .startup-form_editor {
-    @apply mt-3 border-[3px] border-black text-[18px] text-black font-semibold placeholder:text-black-300 !important;
+    @apply mt-3 border-[3px] border-black text-[18px] text-black font-semibold placeholder:text-black-300;
   }
 
-  
+
 }
 
 body {
