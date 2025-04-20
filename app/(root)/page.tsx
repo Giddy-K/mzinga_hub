@@ -11,7 +11,7 @@
 // !important, shadow-100, font-work-sans = .login
 // placeholder:text-black-100 = .search-input
 // !important = .search-btn
-// shadow-200 = .startup-card
+// shadow-200, hover:border-primary = .startup-card
 
 export default function Home() {
   return (
