@@ -14,7 +14,7 @@
 // shadow-200, hover:shadow-300, hover:bg-primary-100, hover:border-primary = .startup-card
 // bg-primary-100, group-hover:bg-white-100 = .startup-card_date
 // text-black-100 = .startup-card_desc
-// !important = .startup-card_btn
+// !important, bg-black-200 = .startup-card_btn
 
 export default function Home() {
   return (
