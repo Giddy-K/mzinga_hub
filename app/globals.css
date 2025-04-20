@@ -115,7 +115,7 @@
 
   /* navbar */
   .avatar {
-    @apply p-0 focus-visible:ring-0 bg-none rounded-full drop-shadow-md !important;
+    @apply p-0 focus-visible:ring-0 bg-none rounded-full drop-shadow-md;
   }
 
 }
