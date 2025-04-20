@@ -19,6 +19,8 @@
 //  !important, placeholder:text-black-300 = .startup-form_textarea
 // !important, placeholder:text-black-300 = .startup-form_editor
 // !important, bg-primary = .startup-form_btn
+// bg-primary-100 = .view-text
+// bg-primary-100 = .category-tag
 
 export default function Home() {
   return (
