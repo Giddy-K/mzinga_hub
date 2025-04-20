@@ -18,6 +18,7 @@
 //  !important, placeholder:text-black-300 = .startup-form_input
 //  !important, placeholder:text-black-300 = .startup-form_textarea
 // !important, placeholder:text-black-300 = .startup-form_editor
+// !important = .startup-form_btn
 
 export default function Home() {
   return (
