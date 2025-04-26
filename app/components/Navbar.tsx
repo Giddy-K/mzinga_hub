@@ -7,6 +7,7 @@ import { signOut, signIn, useSession } from "next-auth/react"; // For client-sid
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
+
 export default function Navbar() {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 left-0 w-full bg-white shadow-md z-50 font-work-sans">
+    <header className="sticky top-0 left-0 w-full bg-transparent shadow-md z-50 font-work-sans">
       <nav className="flex justify-between items-center px-6 py-3">
         {/* Logo */}
         <Link href="/">
