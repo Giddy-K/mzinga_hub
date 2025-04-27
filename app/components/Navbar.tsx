@@ -2,16 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-// import { auth, signOut, signIn, } from "@/auth"; // Server-side, see workaround below
 import { signOut, signIn, useSession } from "next-auth/react"; // For client-side session
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
-  // const session = await auth();
+  const [scrolled, setScrolled] = useState(false);
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -23,8 +21,28 @@ export default function Navbar() {
     { label: "Contact Us", href: "/contact" },
   ];
 
+  // Handle the scroll event
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup event listener on unmount
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 left-0 w-full bg-transparent shadow-md z-50 font-work-sans">
+    <header
+    className={`fixed top-0 left-0 w-full transition-all duration-300 ease-in-out font-work-sans ${
+      scrolled ? "bg-white shadow-md backdrop-blur-md" : "bg-transparent"
+    } z-[100]`}
+    >
       <nav className="flex justify-between items-center px-6 py-3">
         {/* Logo */}
         <Link href="/">
@@ -63,7 +81,6 @@ export default function Navbar() {
               onClick={() => signIn("google")}
               className="ml-4 px-6 py-2 bg-gradient-to-r from-[#4B2E13] to-[#B76E29] text-white rounded-full"
             >
-              {/* &gt;  */}
               Access Account
             </button>
           )}
@@ -122,7 +139,6 @@ export default function Navbar() {
               }}
               className="mt-4 px-4 py-2 bg-gradient-to-r from-[#4B2E13] to-[#B76E29] text-white rounded-ss-full"
             >
-              {/* &gt;  */}
               Access Account
             </button>
           )}
