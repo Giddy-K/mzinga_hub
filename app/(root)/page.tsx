@@ -1,13 +1,13 @@
-'use client'; 
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer.jsx";
 import GoToTop from "../components/GoToTop";
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState('');
+  const [popupType, setPopupType] = useState("");
 
   const openPopup = (type) => {
     setPopupType(type);
@@ -26,10 +26,11 @@ export default function Home() {
           Smart Beekeeping <br /> Made Simple...
         </h1>
         <p className="font-medium text-[20px] text-white max-w-2xl text-left break-words !max-w-3xl">
-          Empower your beekeeping journey with real-time hive tracking, <br />{" "}
+          Empower your beekeeping journey with real-time hive tracking, <br />
           honey production monitoring, and data-driven insights.
         </p>
       </section>
+
       {/* About Section */}
       <section className="about_section py-20 bg-white" id="about">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
@@ -486,7 +487,6 @@ export default function Home() {
         </div>
       </section>
 
-
       {/* Get Involved Section */}
       <section className="involve_section py-20 bg-gray-50" id="involved">
         <div className="container mx-auto px-4">
@@ -498,15 +498,18 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {/* Volunteer Card */}
             <div className="involve_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Volunteer</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Volunteer
+              </h3>
               <p className="text-gray-600 mb-6">
-                At Mzinga Hub, we welcome passionate individuals ready to drive change through 
-                innovation and community engagement. Whether you're a mentor, educator, tech 
-                enthusiast, or someone eager to uplift young minds, your contribution can create 
-                a lasting impact.
+                At Mzinga Hub, we welcome passionate individuals ready to drive
+                change through innovation and community engagement. Whether
+                you're a mentor, educator, tech enthusiast, or someone eager to
+                uplift young minds, your contribution can create a lasting
+                impact.
               </p>
-              <button 
-                onClick={() => openPopup('volunteer')}
+              <button
+                onClick={() => openPopup("volunteer")}
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded transition duration-300"
               >
                 Apply
@@ -515,15 +518,18 @@ export default function Home() {
 
             {/* Donate Card */}
             <div className="involve_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Donate</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Donate
+              </h3>
               <p className="text-gray-600 mb-6">
-                Your support fuels transformation. Every donation to Mzinga Hub helps provide 
-                youth with access to digital tools, training, and opportunities that shape a 
-                brighter future. No amount is too small—each contribution brings us closer to 
-                a more inclusive community.
+                Your support fuels transformation. Every donation to Mzinga Hub
+                helps provide youth with access to digital tools, training, and
+                opportunities that shape a brighter future. No amount is too
+                small—each contribution brings us closer to a more inclusive
+                community.
               </p>
-              <button 
-                onClick={() => openPopup('donate')}
+              <button
+                onClick={() => openPopup("donate")}
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded transition duration-300"
               >
                 Donate
@@ -532,14 +538,17 @@ export default function Home() {
 
             {/* Partner Card */}
             <div className="involve_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Partner with us</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Partner with us
+              </h3>
               <p className="text-gray-600 mb-6">
-                Are you a brand, business, or organization aligned with our vision of tech-powered 
-                growth and youth leadership? Let's collaborate! At Mzinga Hub, we value partnerships 
-                that amplify impact and create sustainable opportunities.
+                Are you a brand, business, or organization aligned with our
+                vision of tech-powered growth and youth leadership? Let's
+                collaborate! At Mzinga Hub, we value partnerships that amplify
+                impact and create sustainable opportunities.
               </p>
-              <button 
-                onClick={() => openPopup('partner')}
+              <button
+                onClick={() => openPopup("partner")}
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded transition duration-300"
               >
                 Contact Us
@@ -549,9 +558,10 @@ export default function Home() {
 
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-gray-600">
-              We believe that every farmer and youth deserves access to opportunities that unlock 
-              their full potential. With your support, we can turn bold ideas into real-world 
-              solutions. Thank you for standing with Mzinga Hub.
+              We believe that every farmer and youth deserves access to
+              opportunities that unlock their full potential. With your support,
+              we can turn bold ideas into real-world solutions. Thank you for
+              standing with Mzinga Hub.
             </p>
           </div>
         </div>
@@ -562,65 +572,75 @@ export default function Home() {
         <div className="popup_overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="popup bg-white p-8 rounded-lg max-w-md w-full mx-4">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
-              {popupType === 'volunteer' && 'Apply as a Volunteer'}
-              {popupType === 'donate' && 'Make a Donation'}
-              {popupType === 'partner' && 'Partner With Us'}
+              {popupType === "volunteer" && "Apply as a Volunteer"}
+              {popupType === "donate" && "Make a Donation"}
+              {popupType === "partner" && "Partner With Us"}
             </h3>
-            <p className="text-gray-600 mb-6">Please fill out the form below:</p>
-            
+            <p className="text-gray-600 mb-6">
+              Please fill out the form below:
+            </p>
+
             <form className="popup_form space-y-4">
               <div>
-                <label htmlFor="name" className="block text-gray-700 mb-1">Name</label>
-                <input 
-                  type="text" 
-                  id="name" 
-                  name="name" 
-                  required 
+                <label htmlFor="name" className="block text-gray-700 mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="email" className="block text-gray-700 mb-1">Email</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  name="email" 
-                  required 
+                <label htmlFor="email" className="block text-gray-700 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="phone" className="block text-gray-700 mb-1">Phone Number</label>
-                <input 
-                  type="tel" 
-                  id="phone" 
-                  name="phone" 
-                  required 
+                <label htmlFor="phone" className="block text-gray-700 mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="message" className="block text-gray-700 mb-1">Message</label>
-                <textarea 
-                  id="message" 
-                  name="message" 
-                  rows="4" 
+                <label htmlFor="message" className="block text-gray-700 mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
                   className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
                 ></textarea>
               </div>
-              
-              <button 
-                type="submit" 
+
+              <button
+                type="submit"
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded transition duration-300"
               >
                 Submit
               </button>
             </form>
-            
-            <button 
+
+            <button
               onClick={closePopup}
               className="mt-4 w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded transition duration-300"
             >
@@ -630,16 +650,17 @@ export default function Home() {
         </div>
       )}
 
-            {/* Blogs & News Section */}
+      {/* Blogs & News Section */}
       <section className="blog_section py-20 bg-gray-50" id="blog">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center relative pb-4">
             Our Blogs & News
             <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-amber-500"></span>
           </h2>
-          
+
           <p className="text-gray-600 text-center max-w-2xl mx-auto mb-12">
-            Latest in Beekeeping Innovation. Stay updated with expert insights, industry trends, and MzingaHub's latest developments.
+            Latest in Beekeeping Innovation. Stay updated with expert insights,
+            industry trends, and MzingaHub's latest developments.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -647,7 +668,7 @@ export default function Home() {
             <div className="blog_card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
               <figure className="blog_banner">
                 <a href="#">
-                  <img 
+                  <img
                     src="/assets/images/blog1.jpeg"
                     width={750}
                     height={350}
@@ -660,7 +681,10 @@ export default function Home() {
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  <a href="#" className="hover:text-amber-600 transition duration-300">
+                  <a
+                    href="#"
+                    className="hover:text-amber-600 transition duration-300"
+                  >
                     Blog Post
                   </a>
                 </h3>
@@ -670,21 +694,54 @@ export default function Home() {
 
                 <div className="flex justify-between items-center text-sm text-gray-500">
                   <div className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <time dateTime="2023-03-07">7 March, 2023</time>
                   </div>
                   <div className="flex space-x-4">
                     <button className="flex items-center" aria-label="Comment">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        />
                       </svg>
                       <span>15</span>
                     </button>
                     <button aria-label="Share">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -696,7 +753,7 @@ export default function Home() {
             <div className="blog_card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
               <figure className="blog_banner">
                 <a href="#">
-                  <img 
+                  <img
                     src="/assets/images/blog2.jpeg"
                     width={750}
                     height={350}
@@ -709,7 +766,10 @@ export default function Home() {
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  <a href="#" className="hover:text-amber-600 transition duration-300">
+                  <a
+                    href="#"
+                    className="hover:text-amber-600 transition duration-300"
+                  >
                     Event
                   </a>
                 </h3>
@@ -719,21 +779,54 @@ export default function Home() {
 
                 <div className="flex justify-between items-center text-sm text-gray-500">
                   <div className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <time dateTime="2023-03-07">7 March, 2023</time>
                   </div>
                   <div className="flex space-x-4">
                     <button className="flex items-center" aria-label="Comment">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        />
                       </svg>
                       <span>15</span>
                     </button>
                     <button aria-label="Share">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -745,7 +838,7 @@ export default function Home() {
             <div className="blog_card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
               <figure className="blog_banner">
                 <a href="#">
-                  <img 
+                  <img
                     src="/assets/images/blog3.jpeg"
                     width={750}
                     height={350}
@@ -758,7 +851,10 @@ export default function Home() {
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  <a href="#" className="hover:text-amber-600 transition duration-300">
+                  <a
+                    href="#"
+                    className="hover:text-amber-600 transition duration-300"
+                  >
                     Photo Gallery
                   </a>
                 </h3>
@@ -768,21 +864,54 @@ export default function Home() {
 
                 <div className="flex justify-between items-center text-sm text-gray-500">
                   <div className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <time dateTime="2023-03-07">7 March, 2023</time>
                   </div>
                   <div className="flex space-x-4">
                     <button className="flex items-center" aria-label="Comment">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        />
                       </svg>
                       <span>15</span>
                     </button>
                     <button aria-label="Share">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -794,7 +923,7 @@ export default function Home() {
             <div className="blog_card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
               <figure className="blog_banner">
                 <a href="#">
-                  <img 
+                  <img
                     src="/assets/images/blog4.jpeg"
                     width={750}
                     height={350}
@@ -807,7 +936,10 @@ export default function Home() {
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  <a href="#" className="hover:text-amber-600 transition duration-300">
+                  <a
+                    href="#"
+                    className="hover:text-amber-600 transition duration-300"
+                  >
                     Video
                   </a>
                 </h3>
@@ -817,21 +949,54 @@ export default function Home() {
 
                 <div className="flex justify-between items-center text-sm text-gray-500">
                   <div className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <time dateTime="2023-03-07">7 March, 2023</time>
                   </div>
                   <div className="flex space-x-4">
                     <button className="flex items-center" aria-label="Comment">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        />
                       </svg>
                       <span>15</span>
                     </button>
                     <button aria-label="Share">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -839,12 +1004,12 @@ export default function Home() {
               </div>
             </div>
           </div>
-          </div>
-        </section>
+        </div>
+      </section>
 
-        <Footer/>
+      <Footer />
 
-        <GoToTop />
+      <GoToTop />
     </>
   );
 }
