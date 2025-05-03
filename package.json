@@ -9,14 +9,11 @@
     "lint": "next lint"
   },
   "packageManager": "npm@10.9.1",
-  "overrides": {
-    "react": "$react",
-    "react-dom": "$react-dom"
-  },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^11.6.1",
     "lucide-react": "^0.488.0",
     "mzinga_hub": "file:",
     "next": "15.3.0",
