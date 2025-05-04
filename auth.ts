@@ -5,6 +5,7 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.AUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID!,
@@ -47,14 +48,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user }) {
       try {
         // Use the UID provided by Google or fallback to email
-        const uid = account?.provider === "google"
-          ? account.providerAccountId
-          : user.id;
+        // const uid = account?.provider === "google"
+        //   ? account.providerAccountId
+        //   : user.id;
+        const email = user.email;
+        if (!email) return false;
 
-        const userRef = doc(db, "users", uid);
+        const userRef = doc(db, "users", email);
         const userSnap = await getDoc(userRef);
 
         if (!userSnap.exists()) {
@@ -67,7 +70,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         // Store UID on the user object for the JWT callback
-        user.id = uid;
+        // user.id = uid;
+        user.id = email;
 
         return true;
       } catch (err) {
@@ -78,12 +82,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.uid = user.id;
+    
+        // Fetch user role from Firestore
+        const userRef = doc(db, "users", user.email);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          token.role = userData.role;
+        }
       }
       return token;
-    },
+    }
+    ,
     async session({ session, token }) {
       if (session.user && token?.uid) {
         session.user.uid = token.uid;
+        session.user.role = token.role; // ✅ Add this
       }
       return session;
     },
