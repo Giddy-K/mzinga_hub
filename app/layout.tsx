@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import RedirectOnLogin from "./components/RedirectOnLogin";
+// import RedirectOnLogin from "./account/RedirectOnLogin";
 
 const workSans = localFont({
   src: [
@@ -72,7 +72,7 @@ export default function RootLayout({
         className={workSans.variable}
       >
         <SessionProvider>
-        <RedirectOnLogin />
+        {/* <RedirectOnLogin /> */}
           {children}
         </SessionProvider>
       </body>
