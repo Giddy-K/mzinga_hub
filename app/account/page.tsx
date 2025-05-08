@@ -3,77 +3,110 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import BeeAnimation from "../components/BeeAnimation"; // Custom or Lottie component
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
-  const [name, setName] = useState(""); // Optional for signup
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignup, setIsSignup] = useState(false); // toggle between login/signup
+  const [isSignup, setIsSignup] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     const result = await signIn("credentials", {
       email,
       password,
       name: isSignup ? name : undefined,
-      redirect: false, // manually handle redirect
+      redirect: false,
     });
 
+    setLoading(false);
     if (result?.ok) {
-      router.push("/"); // redirect after success
+      router.push("/");
     } else {
       alert("Failed to authenticate");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 max-w-md mx-auto space-y-4 bg-white shadow rounded">
-      {isSignup && (
+    <div className="relative min-h-screen bg-gradient-to-br from-yellow-100 to-orange-200 flex items-center justify-center overflow-hidden">
+      {/* Bee Animations Layer */}
+      <BeeAnimation /> {/* Include flying bee logic here */}
+
+      <motion.form
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="relative z-10 w-full max-w-md p-8 bg-white bg-opacity-30 backdrop-blur-lg rounded-2xl shadow-xl space-y-5 border border-white/20"
+      >
+        <h2 className="text-3xl font-bold text-center text-yellow-900">
+          {isSignup ? "Create an Account" : "Welcome Back 🐝"}
+        </h2>
+
+        {isSignup && (
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+        )}
         <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          className="w-full border p-2 rounded"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
           required
         />
-      )}
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        className="w-full border p-2 rounded"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        className="w-full border p-2 rounded"
-        required
-      />
-      <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
-        {isSignup ? "Sign up" : "Login"}
-      </button>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          required
+        />
 
-      <p
-        className="text-sm text-center cursor-pointer text-blue-600"
-        onClick={() => setIsSignup(!isSignup)}
-      >
-        {isSignup ? "Already have an account? Login" : "New here? Sign up"}
-      </p>
-      <p>OR</p>
-      <button
-  type="button"
-  onClick={() => signIn("google", { callbackUrl: "/account/redirect" })}
-  className="w-full bg-red-500 text-white p-2 rounded"
->
-  Sign in with Google
-</button>
-    </form>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-yellow-600 text-white font-semibold py-2 rounded-lg transition hover:bg-yellow-700 disabled:opacity-60"
+        >
+          {loading ? "Loading..." : isSignup ? "Sign up" : "Login"}
+        </button>
+
+        <div className="text-center text-sm text-yellow-900">
+          {isSignup ? "Already have an account?" : "New here?"}{" "}
+          <span
+            onClick={() => setIsSignup(!isSignup)}
+            className="cursor-pointer font-medium underline hover:text-yellow-600"
+          >
+            {isSignup ? "Login" : "Sign up"}
+          </span>
+        </div>
+
+        <div className="relative flex items-center justify-center">
+          <div className="absolute w-full border-t border-yellow-300" />
+          <span className="bg-white px-4 text-yellow-800 relative z-10">OR</span>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => signIn("google", { callbackUrl: "/account/redirect" })}
+          className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
+        >
+          Sign in with Google
+        </button>
+      </motion.form>
+    </div>
   );
 }
