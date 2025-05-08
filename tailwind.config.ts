@@ -17,19 +17,19 @@ const config: Config = {
       },
       colors: {
         primary: {
-          100: "#F7F2EC", // background-like beige
-          200: "#FBE8C5", // soft yellow-beige
-          DEFAULT: "#D4A762", // honey gold
+          100: "#F7F2EC",
+          200: "#FBE8C5",
+          DEFAULT: "#D4A762",
         },
         secondary: {
-          100: "#FBE843", // vibrant yellow for buttons
-          DEFAULT: "#E2A03F", // hover state or base yellow
+          100: "#FBE843",
+          DEFAULT: "#E2A03F",
         },
         brown: {
-          100: "#C6A87D", // light brown
-          200: "#8D6E46", // mid brown
-          300: "#5B3F23", // dark brown for text
-          DEFAULT: "#4B2C14", // default brown (used in navbar/footer)
+          100: "#C6A87D",
+          200: "#8D6E46",
+          300: "#5B3F23",
+          DEFAULT: "#4B2C14",
         },
         gray: {
           100: "#F5F5F5",
@@ -59,6 +59,20 @@ const config: Config = {
         100: "0px 2px 6px rgba(0, 0, 0, 0.08)",
         200: "0px 4px 12px rgba(0, 0, 0, 0.1)",
         300: "0px 8px 24px rgba(75, 44, 20, 0.15)",
+      },
+      animation: {
+        float: "float 6s ease-in-out infinite",
+        "float-reverse": "float-reverse 6s ease-in-out infinite",
+      },
+      keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "float-reverse": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(20px)" },
+        },
       },
     },
   },
