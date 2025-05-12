@@ -1,17 +1,29 @@
 import { auth } from "@/auth";
 import GoToTop from "../../components/GoToTop";
 import Link from "next/link";
-import { FaUsers, FaHive, FaChartLine, FaCogs, FaBell, FaFileAlt } from "react-icons/fa";
+import {
+  FaUsers,
+  FaHive,
+  FaChartLine,
+  FaCogs,
+  FaBell,
+  FaFileAlt,
+} from "react-icons/fa";
 import AdminNavbar from "@/app/components/AdminNavbar";
+import { redirect } from "next/navigation";
 
 export default async function AdminDashboard() {
   const session = await auth();
+
+  // if (session?.user?.role !== "admin") {
+  //   redirect("/unauthorized");
+  // }
 
   const dashboardFeatures = [
     {
       title: "Beekeeping Data",
       description: "Monitor apiaries, hive health, and production stats.",
-      icon: <FaHive size={30} />, 
+      icon: <FaHive size={30} />,
       href: "/admin/apiaries",
     },
     {
@@ -50,8 +62,12 @@ export default async function AdminDashboard() {
     <>
       <AdminNavbar />
       <section className="min-h-screen bg-gray-100 py-20 px-6">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Welcome, {session?.user?.name}</h1>
-        <p className="text-lg text-gray-600 mb-10">You are logged in as an <strong>admin</strong>.</p>
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          Welcome, {session?.user?.name}
+        </h1>
+        <p className="text-lg text-gray-600 mb-10">
+          You are logged in as an <strong>admin</strong>.
+        </p>
 
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {dashboardFeatures.map((feature) => (
@@ -61,7 +77,9 @@ export default async function AdminDashboard() {
               className="bg-white hover:shadow-xl transition-shadow duration-200 shadow-md rounded-2xl p-6 flex flex-col gap-3 cursor-pointer border border-gray-200"
             >
               <div className="text-yellow-500">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-gray-800">{feature.title}</h3>
+              <h3 className="text-xl font-semibold text-gray-800">
+                {feature.title}
+              </h3>
               <p className="text-gray-600 text-sm">{feature.description}</p>
             </Link>
           ))}
@@ -70,4 +88,4 @@ export default async function AdminDashboard() {
       <GoToTop />
     </>
   );
-} 
+}
