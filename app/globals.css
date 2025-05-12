@@ -411,8 +411,13 @@
 
 /* Footer Styles */
 .footer {
-  background-color: #4B2E13;
-  color: white;
+  /* background-image: url('/path/to/your/image.jpg'); Update path */
+  /* background-size: cover;       Ensures the image covers entire footer */
+  /* background-position: center;  Centers the image */
+  /* background-repeat: no-repeat; Prevents tiling */
+  /* color: white; */
+  background-color: white;
+  color: #4B2E13;
 }
 
 .footer-brand {
@@ -511,7 +516,7 @@
 
   .hero_section {
     @apply w-full min-h-[720px] flex justify-start items-start flex-col py-10 px-6 bg-cover bg-center bg-no-repeat;
-    background-image: url("../assets/images/apiary.jpg");
+    background-image: url("../assets/images/hives.gif");
     padding-block-start: 160px;
     /* was 120px */
     padding-block-end: 60px;
@@ -519,7 +524,7 @@
 
   .hero_section {
     @apply w-full min-h-[720px] flex justify-start items-start flex-col py-10 px-6 bg-cover bg-center bg-no-repeat;
-    background-image: url("../assets/images/apiary.jpg");
+    background-image: url("../assets/images/hives.gif");
     padding-top: 180px; /* Add padding so content is pushed BELOW the fixed navbar */
     padding-bottom: 60px;
   }
@@ -535,11 +540,11 @@
   }
 
   .heading {
-    @apply bg-transparent px-3 py-50 font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-left my-5;
+    @apply bg-transparent px-3 py-50 font-extrabold text-black sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-left my-5;
   }
 
   .sub-heading {
-    @apply font-medium text-[20px] text-white max-w-2xl text-left break-words;
+    @apply font-medium text-[20px] text-black max-w-2xl text-left break-words;
   }
 
   .section_container {
