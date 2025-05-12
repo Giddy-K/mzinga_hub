@@ -1,26 +1,24 @@
 import { getDatabase, ref, get } from "firebase/database";
 import { app } from "@/lib/firebase";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import Link from "next/link";
-import { deleteApiaryById } from "@/lib/firebase/deleteApiary";
+import { deleteApiaryAction } from "@/app/actions/deleteApiaryAction";
 
-export default async function ApiaryDetails({ params }: { params: { id: string } }) {
+export default async function ApiaryDetails({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const { id } = await params;
   const session = await auth();
   const db = getDatabase(app);
 
-  const snapshot = await get(ref(db, `apiaries/${params.id}`));
+  const snapshot = await get(ref(db, `apiaries/${id}`));
   if (!snapshot.exists()) return notFound();
 
   const apiary = snapshot.val();
   if (apiary.ownerId !== session?.user?.email) return notFound();
-
-  // ✅ Define delete server action in scope
-  const deleteApiary = async () => {
-    "use server";
-    await deleteApiaryById(params.id);
-    redirect("/apiaries/dashboard");
-  };
 
   return (
     <section className="max-w-4xl mx-auto p-6">
@@ -34,13 +32,14 @@ export default async function ApiaryDetails({ params }: { params: { id: string }
 
       <div className="flex gap-4 mt-6">
         <Link
-          href={`/apiaries/${params.id}/edit`}
+          href={`/apiaries/${id}/edit`}
           className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
         >
           ✏️ Edit
         </Link>
 
-        <form action={deleteApiary}>
+        <form action={deleteApiaryAction}>
+          <input type="hidden" name="id" value={id} />
           <button
             type="submit"
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
