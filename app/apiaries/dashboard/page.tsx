@@ -22,7 +22,7 @@ export default async function UserDashboard() {
       <AdminNavbar />
       <section className="hero_section px-4">
         <h1 className="bg-black/11 p-6 rounded-xl backdrop-blur-[1px] bg-transparent py-5 font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-left my-5 font-work-sans">
-          Welcome <br /> {session?.user?.name ?? "Guest"}...
+          Welcome {session?.user?.name ?? "Guest"}...
         </h1>
 
         <p className="bg-black/11 p-6 rounded-xl backdrop-blur-[1px] font-medium text-[20px] text-white max-w-2xl text-left break-words">
@@ -41,7 +41,7 @@ export default async function UserDashboard() {
             <img
               alt="Get it on Google Play"
               src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-              className="h-[60px] w-auto"
+              className="h-[100px] w-auto"
             />
           </a>
         </div>
@@ -62,37 +62,37 @@ export default async function UserDashboard() {
                 + Add New Apiary
               </Link>
             </div>
-
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6">
-              {apiaries.map((apiary) => (
-                <div
-                  key={apiary.id}
-                  className="bg-gradient-to-br from-yellow-50 to-white p-5 rounded-xl shadow-md hover:shadow-xl transition-all"
-                >
-                  <h3 className="text-xl font-bold text-[#4B2E13] mb-2">
-                    {apiary.title}
-                  </h3>
-                  <p className="text-sm text-gray-700 mb-1">
-                    <strong>Location:</strong> {apiary.location}
-                  </p>
-                  <p className="text-sm text-gray-700 mb-1">
-                    <strong>Hives:</strong> {apiary.numberOfHives}
-                  </p>
-                  <p className="text-sm text-gray-700 mb-1">
-                    <strong>Notes:</strong> {apiary.notes}
-                  </p>
-                  <p className="text-xm text-gray-600 mt-2 text-xs italic">
-                    Added on {new Date(apiary.dateAdded).toLocaleDateString()}
-                  </p>
-
-                  <Link
-                    href={`/apiaries/${apiary.id}`}
-                    className="inline-block mt-4 text-sm text-amber-600 font-semibold hover:underline"
+            <div className="flex justify-center mt-6">
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                {apiaries.map((apiary) => (
+                  <div
+                    key={apiary.id}
+                    className="bg-gradient-to-br from-yellow-50 to-white p-5 rounded-xl shadow-md hover:shadow-xl transition-all w-72"
                   >
-                    View / Manage →
-                  </Link>
-                </div>
-              ))}
+                    <h3 className="text-xl font-bold text-[#4B2E13] mb-2">
+                      {apiary.title}
+                    </h3>
+                    <p className="text-sm text-gray-700 mb-1">
+                      <strong>Location:</strong> {apiary.location}
+                    </p>
+                    <p className="text-sm text-gray-700 mb-1">
+                      <strong>Hives:</strong> {apiary.numberOfHives}
+                    </p>
+                    <p className="text-sm text-gray-700 mb-1">
+                      <strong>Notes:</strong> {apiary.notes}
+                    </p>
+                    <p className="text-sm text-gray-600 mt-2 italic">
+                      Added on {new Date(apiary.dateAdded).toLocaleDateString()}
+                    </p>
+                    <Link
+                      href={`/apiaries/${apiary.id}`}
+                      className="inline-block mt-4 text-sm text-amber-600 font-semibold hover:underline"
+                    >
+                      View / Manage →
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
