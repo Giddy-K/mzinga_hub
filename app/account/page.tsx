@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { FaGoogle } from "react-icons/fa";
 import BeeAnimation from "../components/BeeAnimation"; // Custom or Lottie component
 
 export default function LoginForm() {
@@ -37,7 +38,6 @@ export default function LoginForm() {
     <div className="relative min-h-screen bg-gradient-to-br from-yellow-100 to-orange-200 flex items-center justify-center overflow-hidden">
       {/* Bee Animations Layer */}
       <BeeAnimation /> {/* Include flying bee logic here */}
-
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, y: 40 }}
@@ -46,7 +46,7 @@ export default function LoginForm() {
         className="relative z-10 w-full max-w-md p-8 bg-white bg-opacity-30 backdrop-blur-lg rounded-2xl shadow-xl space-y-5 border border-white/20"
       >
         <h2 className="text-3xl font-bold text-center text-yellow-900">
-          {isSignup ? "Create an Account" : "Welcome Back 🐝"}
+          {isSignup ? "Create an Account" : "Karibu tena..."}
         </h2>
 
         {isSignup && (
@@ -54,7 +54,7 @@ export default function LoginForm() {
             type="text"
             placeholder="Name"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
             required
           />
@@ -63,7 +63,7 @@ export default function LoginForm() {
           type="email"
           placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
           required
         />
@@ -71,7 +71,7 @@ export default function LoginForm() {
           type="password"
           placeholder="Password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
           required
         />
@@ -96,15 +96,18 @@ export default function LoginForm() {
 
         <div className="relative flex items-center justify-center">
           <div className="absolute w-full border-t border-yellow-300" />
-          <span className="bg-white px-4 text-yellow-800 relative z-10">OR</span>
+          <span className="bg-white px-4 text-yellow-800 relative z-10">
+            OR
+          </span>
         </div>
 
         <button
           type="button"
           onClick={() => signIn("google", { callbackUrl: "/account/redirect" })}
-          className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
+          className="w-full flex items-center justify-center gap-3 border border-gray-300 text-gray-700 bg-white py-2 rounded-lg hover:bg-gray-100 transition"
         >
-          Sign in with Google
+          <FaGoogle className="text-xl text-red-500" />
+          <span className="font-medium">Sign in with Google</span>
         </button>
       </motion.form>
     </div>
