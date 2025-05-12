@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer.jsx";
 import GoToTop from "../components/GoToTop";
+import { useInView } from "react-intersection-observer";
+import CountUp from "react-countup";
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState("");
 
-  const openPopup = (type) => {
+  const openPopup = (type: SetStateAction<string>) => {
     setPopupType(type);
     setShowPopup(true);
   };
@@ -18,14 +20,54 @@ export default function Home() {
     setShowPopup(false);
   };
 
+  const { ref, inView } = useInView({
+    triggerOnce: true, // Only trigger once when in view
+    threshold: 0.3,     // How much of the element should be visible
+  });
+
+  const programs = [
+    {
+      icon: "/assets/images/team-leader.png",
+      title: "Beekeeping Management App",
+      description:
+        "A mobile-friendly platform for tracking hives, recording inspections, and analyzing honey production trends.",
+    },
+    {
+      icon: "/assets/images/self-esteem.png",
+      title: "Sustainable Beekeeping Initiatives",
+      description:
+        "We collaborate with beekeepers to implement eco-friendly practices that promote pollinator conservation.",
+    },
+    {
+      icon: "/assets/images/teamwork.png",
+      title: "Data-Driven Insights",
+      description:
+        "Leverage AI-powered analytics to improve hive health, detect issues early, and maximize honey yields.",
+    },
+    {
+      icon: "/assets/images/direction.png",
+      title: "Training & Community Support",
+      description:
+        "Workshops, mentorship programs, and a community of beekeepers to exchange knowledge and best practices.",
+    },
+    {
+      icon: "/assets/images/growth.png",
+      title: "Personal Development",
+      description:
+        "Our talks help people build resilience, set goals, and develop strategies to overcome challenges.",
+    },
+    // Add more items anytime — layout stays dynamic
+  ];
+
   return (
     <>
       <Navbar />
-      <section className="hero_section">
-        <h1 className="bg-transparent py-5 font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-left my-5 font-work-sans">
+      {/* Hero Section */}
+      <section className="hero_section relative z-10">
+        <h1 className="bg-black/11 p-6 rounded-xl backdrop-blur-[1px] py-5 font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-left my-5 font-work-sans">
           Smart Beekeeping <br /> Made Simple...
         </h1>
-        <p className="font-medium text-[20px] text-white max-w-2xl text-left break-words !max-w-3xl">
+        <p className="bg-black/11 p-6 rounded-xl backdrop-blur-[1px] font-medium text-[20px] text-white max-w-3xl text-left break-words">
           Empower your beekeeping journey with real-time hive tracking, <br />
           honey production monitoring, and data-driven insights.
         </p>
@@ -52,7 +94,7 @@ export default function Home() {
             <p className="text-gray-600 mb-6">
               MzingaHub is a powerful beekeeping management platform designed to
               help beekeepers track hive health, optimize honey production, and
-              enhance sustainability. Whether you're a beginner or an
+              enhance sustainability. Whether you&apos;re a beginner or an
               experienced beekeeper, our intuitive tools provide everything you
               need to manage your apiary with ease.
             </p>
@@ -86,23 +128,30 @@ export default function Home() {
                 </span>
               </li>
             </ul>
-            <ul className="flex flex-wrap gap-6">
-              <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
-                <p className="text-3xl font-bold text-amber-600">300+</p>
-                <p className="text-gray-600">Farms Visited</p>
-              </li>
-              <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
-                <p className="text-3xl font-bold text-amber-600">500K+</p>
-                <p className="text-gray-600">Farmers Reached</p>
-              </li>
-              <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
-                <p className="text-3xl font-bold text-amber-600">3</p>
-                <p className="text-gray-600">Years Completed</p>
-              </li>
-            </ul>
+            <ul ref={ref} className="flex flex-wrap gap-6">
+      <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
+        <p className="text-3xl font-bold text-amber-600">
+          {inView ? <CountUp end={300} duration={2} /> : "0"}+
+        </p>
+        <p className="text-gray-600">Farms Visited</p>
+      </li>
+      <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
+        <p className="text-3xl font-bold text-amber-600">
+          {inView ? <CountUp end={5000} duration={3} separator="," /> : "0"}+
+        </p>
+        <p className="text-gray-600">Farmers Reached</p>
+      </li>
+      <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
+        <p className="text-3xl font-bold text-amber-600">
+          {inView ? <CountUp end={3} duration={1.5} /> : "0"}
+        </p>
+        <p className="text-gray-600">Years Completed</p>
+      </li>
+    </ul>
           </div>
         </div>
       </section>
+
       {/* Our Programs Section */}
       <section className="programs_section py-20 bg-gray-50" id="services">
         <div className="container mx-auto px-4">
@@ -111,191 +160,48 @@ export default function Home() {
             <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-amber-500"></span>
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Program 1 */}
-            <div className="program_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              <div className="card_icon mb-4">
-                <img
-                  src="/assets/images/team-leader.png"
-                  width={48}
-                  height={48}
-                  loading="lazy"
-                  alt="Beekeeping Management App icon"
-                  className="mx-auto"
-                />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                Beekeeping Management App
-              </h3>
-              <p className="text-gray-600 mb-4">
-                A mobile-friendly platform for tracking hives, recording
-                inspections, and analyzing honey production trends.
-              </p>
-              <button className="text-amber-600 font-medium flex items-center hover:text-amber-700">
-                Learn more
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
+          <div className="flex flex-wrap justify-center gap-8">
+  {programs.map((program, index) => (
+    <div
+      key={index}
+      className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+    >
+                <div className="card_icon mb-4">
+                  <img
+                    src={program.icon}
+                    width={48}
+                    height={48}
+                    loading="lazy"
+                    alt={`${program.title} icon`}
+                    className="mx-auto"
                   />
-                </svg>
-              </button>
-            </div>
-
-            {/* Program 2 */}
-            <div className="program_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              <div className="card_icon mb-4">
-                <img
-                  src="/assets/images/self-esteem.png"
-                  width={48}
-                  height={48}
-                  loading="lazy"
-                  alt="Sustainable Beekeeping icon"
-                  className="mx-auto"
-                />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                  {program.title}
+                </h3>
+                <p className="text-gray-600 mb-4">{program.description}</p>
+                <button className="text-amber-600 font-medium flex items-center hover:text-amber-700">
+                  Learn more
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 ml-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                Sustainable Beekeeping Initiatives
-              </h3>
-              <p className="text-gray-600 mb-4">
-                We collaborate with beekeepers to implement eco-friendly
-                practices that promote pollinator conservation.
-              </p>
-              <button className="text-amber-600 font-medium flex items-center hover:text-amber-700">
-                Learn more
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            {/* Program 3 */}
-            <div className="program_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              <div className="card_icon mb-4">
-                <img
-                  src="/assets/images/teamwork.png"
-                  width={48}
-                  height={48}
-                  loading="lazy"
-                  alt="Data-Driven Insights icon"
-                  className="mx-auto"
-                />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                Data-Driven Insights
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Leverage AI-powered analytics to improve hive health, detect
-                issues early, and maximize honey yields.
-              </p>
-              <button className="text-amber-600 font-medium flex items-center hover:text-amber-700">
-                Learn more
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            {/* Program 4 */}
-            <div className="program_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              <div className="card_icon mb-4">
-                <img
-                  src="/assets/images/direction.png"
-                  width={48}
-                  height={48}
-                  loading="lazy"
-                  alt="Training & Community Support icon"
-                  className="mx-auto"
-                />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                Training & Community Support
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Workshops, mentorship programs, and a community of beekeepers to
-                exchange knowledge and best practices.
-              </p>
-              <button className="text-amber-600 font-medium flex items-center hover:text-amber-700">
-                Learn more
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            {/* Program 5 */}
-            <div className="program_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              <div className="card_icon mb-4">
-                <img
-                  src="/assets/images/growth.png"
-                  width={48}
-                  height={48}
-                  loading="lazy"
-                  alt="Personal Development icon"
-                  className="mx-auto"
-                />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                Personal Development
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Our talks on personal development help people build resilience,
-                set goals, and develop strategies to overcome challenges they
-                may face.
-              </p>
-              <button className="text-amber-600 font-medium flex items-center hover:text-amber-700">
-                Learn more
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* Our Impact Section */}
       <section className="impact_section py-20 bg-white" id="features">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-12 text-center relative pb-4">
@@ -303,7 +209,7 @@ export default function Home() {
             <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-amber-500"></span>
           </h2>
 
-          <div className="max-w-4xl mx-auto">
+          <div className="text-left">
             <p className="text-gray-600 mb-6">
               MzingaHub is transforming beekeeping by:
             </p>
@@ -311,7 +217,7 @@ export default function Home() {
               <li className="flex items-start">
                 <span className="text-amber-500 mr-2">🐝</span>
                 <span className="text-gray-600">
-                  Supporting over 500+ beekeepers across different regions.
+                  Supporting over 5000+ beekeepers across different regions.
                 </span>
               </li>
               <li className="flex items-start">
@@ -407,7 +313,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="max-w-4xl mx-auto">
+          <div className="text-left">
             <p className="text-gray-600 mb-8">
               We are proud of the impact that we have had on the lives of
               beekeepers in Kajiado County, and we are committed to continuing
@@ -504,7 +410,7 @@ export default function Home() {
               <p className="text-gray-600 mb-6">
                 At Mzinga Hub, we welcome passionate individuals ready to drive
                 change through innovation and community engagement. Whether
-                you're a mentor, educator, tech enthusiast, or someone eager to
+                you&apos;re a mentor, educator, tech enthusiast, or someone eager to
                 uplift young minds, your contribution can create a lasting
                 impact.
               </p>
@@ -543,7 +449,7 @@ export default function Home() {
               </h3>
               <p className="text-gray-600 mb-6">
                 Are you a brand, business, or organization aligned with our
-                vision of tech-powered growth and youth leadership? Let's
+                vision of tech-powered growth and youth leadership? Let&apos;s
                 collaborate! At Mzinga Hub, we value partnerships that amplify
                 impact and create sustainable opportunities.
               </p>
@@ -627,7 +533,7 @@ export default function Home() {
                 <textarea
                   id="message"
                   name="message"
-                  rows="4"
+                  rows={4}
                   className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
                 ></textarea>
               </div>
