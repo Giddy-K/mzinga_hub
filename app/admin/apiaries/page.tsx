@@ -41,7 +41,7 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
   return (
     <>
 <AdminNavbar/>
-    <section className="min-h-screen bg-white px-6 py-12">
+    <section className="min-h-screen mt-6 bg-white px-6 py-12">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Apiaries</h1>
 
       {/* Filters */}
