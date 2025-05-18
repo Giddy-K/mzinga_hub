@@ -1,3 +1,4 @@
+// app/apiaries/[id]/page.tsx
 import { getDatabase, ref, get } from "firebase/database";
 import { app } from "@/lib/firebase";
 import { notFound } from "next/navigation";
@@ -18,7 +19,11 @@ export default async function ApiaryDetails({
   if (!snapshot.exists()) return notFound();
 
   const apiary = snapshot.val();
-  if (apiary.ownerId !== session?.user?.email) return notFound();
+
+  // ✅ Grant access if user is either the owner or an admin
+  const isOwner = session?.user?.email === apiary.ownerId;
+  const isAdmin = session?.user?.role === "admin";
+  if (!isOwner && !isAdmin) return notFound();
 
   return (
     <section className="max-w-4xl mx-auto p-6">
@@ -29,25 +34,29 @@ export default async function ApiaryDetails({
       <p className="text-sm text-gray-600 mt-4 italic">
         Added: {new Date(apiary.dateAdded).toLocaleString()}
       </p>
+      <p className="text-sm text-gray-500 mt-1">Owner: {apiary.ownerId}</p>
 
-      <div className="flex gap-4 mt-6">
-        <Link
-          href={`/apiaries/${id}/edit`}
-          className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
-        >
-          ✏️ Edit
-        </Link>
-
-        <form action={deleteApiaryAction}>
-          <input type="hidden" name="id" value={id} />
-          <button
-            type="submit"
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+      {/* ✅ Show controls only to owner or admin */}
+      {(isOwner || isAdmin) && (
+        <div className="flex gap-4 mt-6">
+          <Link
+            href={`/apiaries/${id}/edit`}
+            className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
           >
-            🗑️ Delete
-          </button>
-        </form>
-      </div>
+            ✏️ Edit
+          </Link>
+
+          <form action={deleteApiaryAction}>
+            <input type="hidden" name="id" value={id} />
+            <button
+              type="submit"
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+            >
+              🗑️ Delete
+            </button>
+          </form>
+        </div>
+      )}
     </section>
   );
 }
