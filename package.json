@@ -16,6 +16,7 @@
     "firebase": "^11.6.1",
     "framer-motion": "^12.10.4",
     "json-2-csv": "^5.5.9",
+    "json2csv": "^6.0.0-alpha.2",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.488.0",
     "mzinga_hub": "file:",
