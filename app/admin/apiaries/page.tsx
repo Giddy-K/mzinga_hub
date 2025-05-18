@@ -1,76 +1,85 @@
 // app/admin/apiaries/page.tsx
-
 import { auth } from "@/auth";
 import { getAllApiaries } from "@/lib/firebase/getAllApiaries";
 import { deleteApiaryById } from "@/lib/firebase/deleteApiary";
-import { redirect } from "next/navigation";
+import ExportCSVButton from "@/app/components/ExportCSVButton";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import AdminNavbar from "@/app/components/AdminNavbar";
 
-export default async function AdminApiariesPage({
-  searchParams,
-}: {
+interface PageProps {
   searchParams?: { owner?: string; query?: string };
-}) {
-  const session = await auth();
+}
 
+export default async function AdminApiariesPage({ searchParams }: PageProps) {
+  /* ───────────────────────────────────────── auth guard ─── */
+  const session = await auth();
   if (session?.user?.role !== "admin") redirect("/unauthorized");
 
+  /* ─────────────────────────────── resolve searchParams ─── */
+  const { owner = "", query = "" } = (await searchParams) ?? {}; // ⚠️ <— no warning
+
+  /* ───────────────────────── fetch + filter apiaries ────── */
   const apiaries = await getAllApiaries();
 
-  const uniqueOwners = [...new Set(apiaries.map((a) => a.ownerId).filter(Boolean))];
+  const uniqueOwners = [
+    ...new Set(apiaries.map((a) => a.ownerId).filter(Boolean)),
+  ];
 
-  const filteredApiaries = apiaries.filter((a) => {
-    const matchesOwner = searchParams?.owner
-      ? a.ownerId === searchParams.owner
-      : true;
-
-    const matchesQuery = searchParams?.query
-      ? a.title.toLowerCase().includes(searchParams.query.toLowerCase()) ||
-        a.location.toLowerCase().includes(searchParams.query.toLowerCase())
-      : true;
-
+  const q = query.toLowerCase();
+  const filtered = apiaries.filter((a) => {
+    const matchesOwner = owner ? a.ownerId === owner : true;
+    const matchesQuery =
+      q === ""
+        ? true
+        : a.title.toLowerCase().includes(q) ||
+          a.location.toLowerCase().includes(q);
     return matchesOwner && matchesQuery;
   });
 
+  /* ─────────────────────────────────────────── UI ───────── */
   return (
+    <>
+<AdminNavbar/>
     <section className="min-h-screen bg-white px-6 py-12">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Apiaries</h1>
 
       {/* Filters */}
-      <form method="GET" className="mb-6 flex flex-wrap gap-4 items-center">
+      <form className="mb-6 flex flex-wrap gap-4 items-center" method="GET">
         <input
+          className="border border-gray-300 px-3 py-2 rounded-md"
           type="text"
           name="query"
-          placeholder="Search title/location..."
-          defaultValue={searchParams?.query ?? ""}
-          className="border border-gray-300 px-3 py-2 rounded-md"
+          placeholder="Search title / location…"
+          defaultValue={query}
         />
+
         <select
-          name="owner"
-          defaultValue={searchParams?.owner ?? ""}
           className="border border-gray-300 px-3 py-2 rounded-md"
+          name="owner"
+          defaultValue={owner}
         >
-          <option value="">All Owners</option>
-          {uniqueOwners.map((owner) => (
-            <option key={owner} value={owner}>
-              {owner}
+          <option value="">All owners</option>
+          {uniqueOwners.map((o) => (
+            <option key={o} value={o}>
+              {o}
             </option>
           ))}
         </select>
+
         <button
           type="submit"
           className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600"
         >
           Filter
         </button>
-        {/* CSV export should be moved client-side */}
-        {/* <button
-          type="button"
-          onClick={exportToCSV}
-          className="ml-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-        >
-          Export CSV
-        </button> */}
+
+        {/* client‑side CSV export button */}
+        <ExportCSVButton
+          data={filtered}
+          filename="apiaries.csv"
+          className="ml-auto"
+        />
       </form>
 
       {/* Table */}
@@ -86,27 +95,32 @@ export default async function AdminApiariesPage({
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
+
           <tbody>
-            {filteredApiaries.map((apiary) => (
-              <tr key={apiary.id} className="border-b">
-                <td className="px-4 py-3 font-medium">{apiary.title}</td>
-                <td className="px-4 py-3">{apiary.location}</td>
-                <td className="px-4 py-3">{apiary.numberOfHives}</td>
-                <td className="px-4 py-3 text-sm text-gray-500">{apiary.ownerId}</td>
+            {filtered.map((a) => (
+              <tr key={a.id} className="border-b">
+                <td className="px-4 py-3 font-medium">{a.title}</td>
+                <td className="px-4 py-3">{a.location}</td>
+                <td className="px-4 py-3">{a.numberOfHives}</td>
+                <td className="px-4 py-3 text-sm text-gray-500">
+                  {a.ownerId}
+                </td>
                 <td className="px-4 py-3 text-sm">
-                  {new Date(apiary.dateAdded).toLocaleDateString()}
+                  {new Date(a.dateAdded).toLocaleDateString()}
                 </td>
                 <td className="px-4 py-3 space-x-2">
                   <Link
-                    href={`/apiaries/${apiary.id}`}
+                    href={`/apiaries/${a.id}`}
                     className="text-blue-500 hover:underline"
                   >
                     View
                   </Link>
+
+                  {/* delete uses server action */}
                   <form
                     action={async () => {
                       "use server";
-                      await deleteApiaryById(apiary.id);
+                      await deleteApiaryById(a.id);
                       redirect("/admin/apiaries");
                     }}
                   >
@@ -124,5 +138,6 @@ export default async function AdminApiariesPage({
         </table>
       </div>
     </section>
+        </>
   );
 }
