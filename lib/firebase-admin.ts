@@ -16,6 +16,7 @@
 // !Updated code
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getDatabase } from "firebase-admin/database";
+import * as admin from "firebase-admin";
 
 // Only run once in the server environment
 if (!getApps().length) {
@@ -26,3 +27,4 @@ if (!getApps().length) {
 }
 
 export const adminDB = getDatabase();
+export { admin };
