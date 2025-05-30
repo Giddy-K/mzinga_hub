@@ -10,38 +10,36 @@ import { redirect } from "next/navigation";
 /* ---------- helpers ---------- */
 type Search = { owner?: string; query?: string };
 
-/** match Next.js’ generated PageProps signature */
+/** ←---  ONLY a Promise or undefined – exactly what Next.js emits */
 interface PageProps {
   searchParams?: Promise<Search>;
 }
 
-/* ---------- page ---------- */
 export default async function AdminApiariesPage({ searchParams }: PageProps) {
   /* auth */
   const session = await auth();
   if (session?.user?.role !== "admin") redirect("/unauthorized");
 
-  /* resolve params (works for undefined too) */
-  const params: Search = searchParams ? await searchParams : {};
-  const owner = params.owner ?? "";
-  const query = params.query?.toLowerCase() ?? "";
+  /* await the promise (works when undefined too) */
+  const { owner = "", query = "" } = (await searchParams) ?? {};
 
   /* data */
   const apiaries = (await getAllApiaries()).map((a) => ({
     ...a,
     dateAdded: a.dateAdded ?? new Date().toISOString(),
   }));
-
   const owners = [...new Set(apiaries.map((a) => a.ownerId).filter(Boolean))];
 
+  const q = query.toLowerCase();
   const filtered = apiaries.filter((a) => {
-    const okOwner = owner ? a.ownerId === owner : true;
-    const okQuery =
-      query === "" ||
-      a.title.toLowerCase().includes(query) ||
-      a.location.toLowerCase().includes(query);
+    const okOwner  = owner ? a.ownerId === owner : true;
+    const okQuery  =
+      q === "" ||
+      a.title.toLowerCase().includes(q) ||
+      a.location.toLowerCase().includes(q);
     return okOwner && okQuery;
   });
+
 
   /* UI */
   return (
@@ -57,7 +55,7 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
         <form className="mb-6 flex flex-wrap gap-4 items-center">
           <input
             name="query"
-            defaultValue={params.query ?? ""}
+            defaultValue={query}
             placeholder="Search title / location…"
             className="border border-gray-300 px-3 py-2 rounded-md"
           />
