@@ -1,4 +1,3 @@
-// File: app/api/admin/get-users/route.ts
 import { admin } from "@/lib/firebase-admin";
 
 export async function GET() {
