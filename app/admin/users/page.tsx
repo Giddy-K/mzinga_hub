@@ -1,8 +1,6 @@
-// app/admin/users/page.tsx
-
 import { auth } from "@/auth";
-import { getAllUsers } from "@/lib/admin/getAllUsers"; // ✅ You'll implement this
-import { updateUserRole, deleteUser } from "@/lib/admin/userActions"; // ✅ Server actions
+import { getAllUsers } from "@/lib/admin/getAllUsers";
+import { updateUserRole, deleteUser } from "@/lib/admin/userActions";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import AdminNavbar from "@/app/components/AdminNavbar";
