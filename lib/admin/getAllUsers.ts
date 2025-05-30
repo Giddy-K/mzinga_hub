@@ -1,4 +1,3 @@
-// lib/admin/getAllUsers.ts
 import { db } from "@/lib/firebase";
 import { collection, getDocs, Timestamp } from "firebase/firestore";
 
