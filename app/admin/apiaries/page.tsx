@@ -12,7 +12,7 @@ type Search = { owner?: string; query?: string };
 
 /** ←---  ONLY a Promise or undefined – exactly what Next.js emits */
 interface PageProps {
-  searchParams?: Promise<Search>;
+  searchParams?: Search
 }
 
 export default async function AdminApiariesPage({ searchParams }: PageProps) {
@@ -21,7 +21,7 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
   if (session?.user?.role !== "admin") redirect("/unauthorized");
 
   /* await the promise (works when undefined too) */
-  const { owner = "", query = "" } = (await searchParams) ?? {};
+  const { owner = "", query = "" } = searchParams ?? {};
 
   /* data */
   const apiaries = (await getAllApiaries()).map((a) => ({
