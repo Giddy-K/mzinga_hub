@@ -1,6 +1,6 @@
 import { Parser } from "json2csv";
 
-export async function json2csv(data: any[]) {
-  const parser = new Parser();
+export const json2csv = <T extends object>(data: T[]): string => {
+  const parser = new Parser<T>();
   return parser.parse(data);
-}
+};
