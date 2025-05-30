@@ -1,8 +1,12 @@
-import { getDatabase, ref, get } from "firebase/database";
-import { app } from "@/lib/firebase";
+import { adminDB } from "@/lib/firebase-admin";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { updateApiaryAction } from "@/app/actions/updateApiaryAction";
+import type { ApiaryUpdateData } from "@/types/apiary";
+
+function toStr(v: FormDataEntryValue | null): string | undefined {
+  return typeof v === "string" ? v : undefined;
+}
 
 export default async function EditApiaryPage({
   params,
@@ -11,26 +15,31 @@ export default async function EditApiaryPage({
 }) {
   const { id } = await params;
   const session = await auth();
-  const db = getDatabase(app);
-  const snapshot = await get(ref(db, `apiaries/${id}`));
 
+  /* 🔑 Admin SDK read bypasses rules */
+  const snapshot = await adminDB.ref(`apiaries/${id}`).get();
   if (!snapshot.exists()) return notFound();
+
   const apiary = snapshot.val();
 
-  if (apiary.ownerId !== session?.user?.email) return notFound();
+  /* Access control */
+  if (apiary.ownerId !== session?.user?.email && session?.user?.role !== "admin")
+    return notFound();
 
   return (
     <form
-      action={async (formData) => {
-        "use server";
-        const updatedData = {
-          title: formData.get("title"),
-          location: formData.get("location"),
-          numberOfHives: Number(formData.get("numberOfHives")),
-          notes: formData.get("notes"),
-        };
-        await updateApiaryAction(id, updatedData);
-      }}
+  action={async (formData) => {
+    "use server";
+
+    const updatedData: ApiaryUpdateData = {
+      title:       toStr(formData.get("title")),
+      location:    toStr(formData.get("location")),
+      numberOfHives: Number(formData.get("numberOfHives") || 0),
+      notes:       toStr(formData.get("notes")),
+    };
+
+    await updateApiaryAction(id, updatedData);
+  }}
       className="max-w-xl mx-auto p-6 bg-white shadow-md rounded"
     >
       <h2 className="text-2xl font-bold mb-4">Edit Apiary</h2>
