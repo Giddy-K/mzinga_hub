@@ -8,12 +8,19 @@ function toStr(v: FormDataEntryValue | null): string | undefined {
   return typeof v === "string" ? v : undefined;
 }
 
-export default async function EditApiaryPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = await params;
+interface PageProps {
+  params: { id: string };    //  ← CORRECT
+ }
+
+export default async function EditApiaryPage(
+//   {
+//   params,
+// }: {
+//   params: { id: string };
+// }
+{ params }: PageProps
+) {
+  const { id } = params;
   const session = await auth();
 
   /* 🔑 Admin SDK read bypasses rules */
