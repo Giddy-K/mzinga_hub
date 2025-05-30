@@ -1,23 +1,27 @@
+// app/admin/apiaries/page.tsx
 import { auth } from "@/auth";
 import { getAllApiaries } from "@/lib/firebase/getAllApiaries";
 import { deleteApiaryById } from "@/lib/firebase/deleteApiary";
 import ExportCSVButton from "@/app/components/ExportCSVButton";
+import AdminNavbar from "@/app/components/AdminNavbar";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import AdminNavbar from "@/app/components/AdminNavbar";
+
+type Search = { owner?: string; query?: string };
 
 export default async function AdminApiariesPage({
-  /** URL query‐string values */
   searchParams,
 }: {
-  searchParams?: { owner?: string; query?: string };
+  /**   In dev this is the plain object –  
+   *   in the generated build type it is `Promise<any>`  */
+  searchParams?: Search | Promise<Search>;
 }) {
   /* ─── auth guard ─── */
   const session = await auth();
   if (session?.user?.role !== "admin") redirect("/unauthorized");
 
-  /* ─── resolve searchParams ─── */
-  const { owner = "", query = "" } = searchParams ?? {};
+  /* ─── resolve (handles both cases) ─── */
+  const { owner = "", query = "" } = (await searchParams) ?? {};
 
   /* ────── fetch + filter apiaries ────── */
   const apiaries = (await getAllApiaries()).map((a) => ({
@@ -39,12 +43,11 @@ export default async function AdminApiariesPage({
   return (
     <>
       <AdminNavbar />
-
       <section className="min-h-screen mt-6 bg-white px-6 py-12">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">All Apiaries</h1>
 
         {/* Filters */}
-        <form className="mb-6 flex flex-wrap gap-4 items-center" /* GET by default */>
+        <form className="mb-6 flex flex-wrap gap-4 items-center">
           <input
             className="border border-gray-300 px-3 py-2 rounded-md"
             type="text"
