@@ -1,5 +1,3 @@
-// /app/admin/content/new.tsx
-
 import ContentForm from "@/app/components/ContentForm";
 
 
