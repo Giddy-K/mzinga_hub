@@ -6,6 +6,7 @@ import Footer from "../components/Footer.jsx";
 import GoToTop from "../components/GoToTop";
 import { useInView } from "react-intersection-observer";
 import CountUp from "react-countup";
+import Image from "next/image";
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
@@ -77,7 +78,7 @@ export default function Home() {
       <section className="about_section py-20 bg-white" id="about">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
           <figure className="about_banner md:w-1/2">
-            <img
+            <Image
               src="/assets/images/About_group.jpeg" // Replace with your actual image path
               width={700}
               height={532}
@@ -167,7 +168,7 @@ export default function Home() {
       className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
     >
                 <div className="card_icon mb-4">
-                  <img
+                  <Image
                     src={program.icon}
                     width={48}
                     height={48}
@@ -271,8 +272,8 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-gray-600 italic">
-                    "MzingaHub has helped me increase my honey yield by 30%
-                    while keeping my hives healthier than ever!"
+                    &quot;MzingaHub has helped me increase my honey yield by 30%
+                    while keeping my hives healthier than ever!&quot;
                   </p>
                   <p className="text-gray-800 font-medium mt-3">
                     [Name], [Farm Name]
@@ -302,8 +303,8 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-gray-600 italic">
-                    "The training from MzingaHub completely transformed how I
-                    manage my apiary. My production has doubled!"
+                    &quot;The training from MzingaHub completely transformed how I
+                    manage my apiary. My production has doubled!&quot;
                   </p>
                   <p className="text-gray-800 font-medium mt-3">
                     [Name], [Farm Name]
@@ -321,9 +322,9 @@ export default function Home() {
             </p>
 
             <p className="text-gray-600 mb-12">
-              But don't just take our word for it. Here are some testimonials
+              But don&apos;t just take our word for it. Here are some testimonials
               from Farmers, neighbouring communities and partners who have seen
-              the impact of Mzinga Hub's programs:
+              the impact of Mzinga Hub&apos;s programs:
             </p>
           </div>
 
@@ -349,8 +350,8 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-gray-600 italic">
-                    "As a community leader, I've seen how MzingaHub has brought
-                    new economic opportunities to our area."
+                    &quot;As a community leader, I&apos;ve seen how MzingaHub has brought
+                    new economic opportunities to our area.&quot;
                   </p>
                   <p className="text-gray-800 font-medium mt-3">
                     [Name], Community Leader
@@ -380,8 +381,8 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-gray-600 italic">
-                    "Partnering with MzingaHub has allowed us to scale our
-                    conservation efforts while supporting local livelihoods."
+                    &quot;Partnering with MzingaHub has allowed us to scale our
+                    conservation efforts while supporting local livelihoods.&quot;
                   </p>
                   <p className="text-gray-800 font-medium mt-3">
                     [Name], Conservation Partner
@@ -566,7 +567,7 @@ export default function Home() {
 
           <p className="text-gray-600 text-center max-w-2xl mx-auto mb-12">
             Latest in Beekeeping Innovation. Stay updated with expert insights,
-            industry trends, and MzingaHub's latest developments.
+            industry trends, and MzingaHub&apos;s latest developments.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -574,7 +575,7 @@ export default function Home() {
             <div className="blog_card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
               <figure className="blog_banner">
                 <a href="#">
-                  <img
+                  <Image
                     src="/assets/images/blog1.jpeg"
                     width={750}
                     height={350}
@@ -659,7 +660,7 @@ export default function Home() {
             <div className="blog_card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
               <figure className="blog_banner">
                 <a href="#">
-                  <img
+                  <Image
                     src="/assets/images/blog2.jpeg"
                     width={750}
                     height={350}
@@ -680,7 +681,7 @@ export default function Home() {
                   </a>
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  MzingaHub's Latest Features
+                  MzingaHub&apos;s Latest Features
                 </p>
 
                 <div className="flex justify-between items-center text-sm text-gray-500">
@@ -744,7 +745,7 @@ export default function Home() {
             <div className="blog_card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
               <figure className="blog_banner">
                 <a href="#">
-                  <img
+                  <Image
                     src="/assets/images/blog3.jpeg"
                     width={750}
                     height={350}
@@ -829,7 +830,7 @@ export default function Home() {
             <div className="blog_card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
               <figure className="blog_banner">
                 <a href="#">
-                  <img
+                  <Image
                     src="/assets/images/blog4.jpeg"
                     width={750}
                     height={350}
@@ -850,7 +851,7 @@ export default function Home() {
                   </a>
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Beekeepers' Success Stories
+                  Beekeepers&apos; Success Stories
                 </p>
 
                 <div className="flex justify-between items-center text-sm text-gray-500">
