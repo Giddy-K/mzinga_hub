@@ -1,4 +1,3 @@
-// app/components/AnalyticsClient.tsx
 "use client";
 
 import {
@@ -27,13 +26,13 @@ ChartJS.register(
   Legend
 );
 
-// ---- types --------------------------------------------------------------
+// ---- types -----
 type Apiary = {
   dateAdded: string | { seconds: number };   // Firestore Timestamp OR ISO string
   location?: string;
 };
 
-// ---- component ----------------------------------------------------------
+// ---- component ----
 export default function AdminAnalyticsClient({ apiaries }: { apiaries: Apiary[] }) {
   /**
    * Crunch the numbers once per page‑load.
@@ -44,7 +43,7 @@ export default function AdminAnalyticsClient({ apiaries }: { apiaries: Apiary[] 
     const byLocation: Record<string, number> = {};
 
     apiaries.forEach((a) => {
-      // ── 1. normalise date ───────────────────────────────────────────────
+      // ── 1. normalise date ──
       const d =
         typeof a.dateAdded === "object" && "seconds" in a.dateAdded
           ? new Date(a.dateAdded.seconds * 1000)
@@ -53,7 +52,7 @@ export default function AdminAnalyticsClient({ apiaries }: { apiaries: Apiary[] 
       const dateLabel = d.toLocaleDateString();        // e.g. "18/5/2025"
       byDate[dateLabel] = (byDate[dateLabel] || 0) + 1;
 
-      // ── 2. count per location ──────────────────────────────────────────
+      // ── 2. count per location ──
       const loc = a.location || "Unknown";
       byLocation[loc] = (byLocation[loc] || 0) + 1;
     });
@@ -95,7 +94,7 @@ export default function AdminAnalyticsClient({ apiaries }: { apiaries: Apiary[] 
     };
   }, [apiaries]);
 
-  // ---- UI ---------------------------------------------------------------
+  // ---- UI ----
   return (
     <>
       <AdminNavbar />
