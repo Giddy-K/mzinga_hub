@@ -1,4 +1,3 @@
-
 import { getDatabase, ref, push } from "firebase/database";
 import { app } from "@/lib/firebase";
 
