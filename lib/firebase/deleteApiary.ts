@@ -1,7 +1,5 @@
-import { getDatabase, ref, remove } from "firebase/database";
-import { app } from "@/lib/firebase";
+import { adminDB } from "../firebase-admin";
 
 export async function deleteApiaryById(id: string) {
-  const db = getDatabase(app);
-  await remove(ref(db, `apiaries/${id}`));
+  await adminDB.ref(`apiaries/${id}`).remove(); // uses Admin SDK
 }
