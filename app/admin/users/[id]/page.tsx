@@ -1,5 +1,3 @@
-// app/admin/users/[id]/page.tsx
-
 import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
@@ -7,7 +5,7 @@ import { notFound } from "next/navigation";
 export default async function AdminUserLogsPage(props: {
   params: { id: string };
 }) {
-  const { params } = await props; // ✅ Await params properly
+  const { params } = await props; // Await params properly
  const { id } = await params;
   const session = await auth();
   if (session?.user?.role !== "admin") notFound();
