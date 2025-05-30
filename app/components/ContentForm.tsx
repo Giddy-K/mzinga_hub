@@ -1,6 +1,6 @@
-// /app/admin/content/components/ContentForm.tsx
 "use client";
-import { useState } from "react";
+
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
@@ -10,12 +10,13 @@ export default function ContentForm() {
   const [type, setType] = useState("Blog");
   const [content, setContent] = useState("");
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const res = await fetch("/api/admin/content", {
       method: "POST",
       body: JSON.stringify({ title, type, content }),
+      headers: { "Content-Type": "application/json" },
     });
 
     if (res.ok) {
@@ -53,7 +54,10 @@ export default function ContentForm() {
         className="w-full p-3 border rounded-lg"
         required
       />
-      <button type="submit" className="bg-yellow-500 px-6 py-2 text-white rounded-lg hover:bg-yellow-600">
+      <button
+        type="submit"
+        className="bg-yellow-500 px-6 py-2 text-white rounded-lg hover:bg-yellow-600"
+      >
         Publish
       </button>
     </form>
