@@ -13,7 +13,7 @@ export default function RedirectOnLogin() {
     if (session?.user?.email) {
       checkUserRoleAndRedirect(session.user.email, router);
     }
-  }, [session]);
+  }, [router, session]);
 
   return null;
 }
