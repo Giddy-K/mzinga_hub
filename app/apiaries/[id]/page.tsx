@@ -1,6 +1,4 @@
-// app/apiaries/[id]/page.tsx
-import { getDatabase, ref, get } from "firebase/database";
-import { app } from "@/lib/firebase";
+import { adminDB } from "@/lib/firebase-admin";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import Link from "next/link";
@@ -13,14 +11,13 @@ export default async function ApiaryDetails({
 }) {
   const { id } = await params;
   const session = await auth();
-  const db = getDatabase(app);
 
-  const snapshot = await get(ref(db, `apiaries/${id}`));
+  // 🔥 Admin SDK usage — bypasses Realtime DB rules
+  const snapshot = await adminDB.ref(`apiaries/${id}`).get();
   if (!snapshot.exists()) return notFound();
 
   const apiary = snapshot.val();
 
-  // ✅ Grant access if user is either the owner or an admin
   const isOwner = session?.user?.email === apiary.ownerId;
   const isAdmin = session?.user?.role === "admin";
   if (!isOwner && !isAdmin) return notFound();
