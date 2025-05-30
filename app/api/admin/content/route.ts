@@ -14,6 +14,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ id: docRef.id });
   } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: "Failed to create content" }, { status: 500 });
   }
 }
