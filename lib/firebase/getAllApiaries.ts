@@ -1,12 +1,12 @@
-import { getDatabase, ref, get } from "firebase/database";
-import { app } from "@/lib/firebase";
+import type { Apiary } from "@/types/apiary";
+import { adminDB } from "@/lib/firebase-admin";
 
-export async function getAllApiaries() {
-  const db = getDatabase(app);
-  const snapshot = await get(ref(db, "apiaries"));
+export async function getAllApiaries(): Promise<(Apiary & { id: string })[]> {
+  const snapshot = await adminDB.ref("apiaries").get();  // bypasses rules
 
   if (!snapshot.exists()) return [];
 
-  const data = snapshot.val();
-  return Object.entries(data).map(([id, value]: any) => ({ id, ...value }));
+  const data = snapshot.val() as Record<string, Apiary>;
+
+  return Object.entries(data).map(([id, value]) => ({ id, ...value }));
 }
