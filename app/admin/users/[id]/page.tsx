@@ -2,10 +2,10 @@ import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 
-type Params = { id: string };
+// type Params = { id: string };
 
 interface PageProps {
-  params: Promise<Params>;          // ← only Promise
+  params: { id: string };          // ← only Promise
 }
 
 export default async function AdminUserLogsPage({ params }: PageProps) {
@@ -13,7 +13,7 @@ export default async function AdminUserLogsPage({ params }: PageProps) {
   const session = await auth();
   if (session?.user?.role !== "admin") notFound();
 
-  const { id } = await params;      // ← await here
+  const { id } = params;      // ← await here
 
   const logs = await getUserLogs(id);
 
