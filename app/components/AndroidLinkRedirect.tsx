@@ -5,8 +5,9 @@ export default function AndroidLinkRedirect() {
   useEffect(() => {
     if (/android/i.test(navigator.userAgent)) {
       document.querySelectorAll("a[href]").forEach(link => {
-        if (link.href.includes("https://play.google.com/store/apps/")) {
-          link.href = link.href.replace(
+        const anchor = link as HTMLAnchorElement;  // tell TS this is an anchor element
+        if (anchor.href.includes("https://play.google.com/store/apps/")) {
+          anchor.href = anchor.href.replace(
             "https://play.google.com/store/apps/",
             "market://"
           );
