@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export async function checkUserRoleAndRedirect(
   email: string,
