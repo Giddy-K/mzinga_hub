@@ -1,11 +1,10 @@
 import { auth } from "@/auth";
 import Link from "next/link";
-import { formatDate } from "@/lib/utils/formatDate";
 import GoToTop from "../../components/GoToTop";
 import AndroidLinkRedirect from "@/app/components/AndroidLinkRedirect";
 import AdminNavbar from "@/app/components/AdminNavbar";
-import { addApiaryForUser } from "@/lib/firebase/pushNewApiary.js";
 import { getUserRealtimeApiaries } from "@/lib/firebase/getUserRealtimeApiaries";
+import Image from "next/image";
 
 export default async function UserDashboard() {
   const session = await auth();
@@ -14,14 +13,17 @@ export default async function UserDashboard() {
   //   : [];
 
   const apiaries = session?.user?.email
-    ? await getUserRealtimeApiaries(session.user.email)
+    ? (await getUserRealtimeApiaries(session.user.email)).map((a) => ({
+        ...a,
+        dateAdded: a.dateAdded ?? new Date().toISOString(), // fallback
+      }))
     : [];
 
   return (
     <>
       <AdminNavbar />
       <section className="hero_section px-4">
-        <h1 className="bg-black/11 p-6 rounded-xl backdrop-blur-[1px] bg-transparent py-5 font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-left my-5 font-work-sans">
+        <h1 className="bg-black/11 p-6 rounded-xl backdrop-blur-[1px] py-5 font-extrabold text-white sm:text-[54px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-left my-5 font-work-sans">
           Welcome {session?.user?.name ?? "Guest"}...
         </h1>
 
@@ -38,10 +40,12 @@ export default async function UserDashboard() {
             rel="noopener noreferrer"
             className="inline-block transition-transform hover:scale-105"
           >
-            <img
+            <Image
               alt="Get it on Google Play"
               src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-              className="h-[100px] w-auto"
+              width={180} // Set width and height explicitly (approximate)
+              height={100}
+              className="w-auto"
             />
           </a>
         </div>
