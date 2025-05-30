@@ -22,7 +22,7 @@ export default function RedirectPage() {
     };
 
     handleRedirect();
-  }, [session, status]);
+  }, [router, session, status]);
 
   return <FullScreenLoader />;
 }
