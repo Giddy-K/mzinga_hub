@@ -1,4 +1,3 @@
-// lib/admin/notifications.ts
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
