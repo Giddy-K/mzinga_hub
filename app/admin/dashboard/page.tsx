@@ -10,7 +10,6 @@ import {
   FaFileAlt,
 } from "react-icons/fa";
 import AdminNavbar from "@/app/components/AdminNavbar";
-import { redirect } from "next/navigation";
 
 export default async function AdminDashboard() {
   const session = await auth();
