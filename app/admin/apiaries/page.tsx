@@ -17,7 +17,7 @@ export default async function AdminApiariesPage({ searchParams = {} }: PageProps
 
   /* ─── resolve searchParams ─── */
   // const { owner = "", query = "" } = (await searchParams) ?? {}; // ⚠️ <— no warning
-    const { owner = "", query = "" } = searchParams;
+    const { owner = "", query = "" } = searchParams ?? {};
 
   /* ────── fetch + filter apiaries ────── */
   const apiaries = (await getAllApiaries()).map((apiary) => ({
