@@ -2,29 +2,31 @@ import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 
-export default async function AdminUserLogsPage(props: {
-  params: { id: string };
-}) {
-  const { params } = await props; // Await params properly
- const { id } = await params;
+type Params = { id: string };
+
+interface PageProps {
+  params: Promise<Params>;          // ← only Promise
+}
+
+export default async function AdminUserLogsPage({ params }: PageProps) {
+  /* auth guard */
   const session = await auth();
   if (session?.user?.role !== "admin") notFound();
 
-  const uid = decodeURIComponent(id); // decode for @ in email
+  const { id } = await params;      // ← await here
 
-  const logs = await getUserLogs(uid);
+  const logs = await getUserLogs(id);
 
-  if (!logs.length) {
+  if (logs.length === 0) {
     return (
       <div className="p-6 text-center text-gray-600">
         No logs found for this user.
       </div>
     );
   }
-
   return (
     <section className="min-h-screen bg-white px-6 py-12">
-      <h1 className="text-2xl font-bold mb-6">Logs for {uid}</h1>
+      <h1 className="text-2xl font-bold mb-6">Logs for {id}</h1>
       <div className="space-y-4">
         {logs.map((log, i) => (
           <div
