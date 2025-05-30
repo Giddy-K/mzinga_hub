@@ -10,13 +10,14 @@ interface PageProps {
   searchParams?: { owner?: string; query?: string };
 }
 
-export default async function AdminApiariesPage({ searchParams }: PageProps) {
+export default async function AdminApiariesPage({ searchParams = {} }: PageProps) {
   /* ─── auth guard ─── */
   const session = await auth();
   if (session?.user?.role !== "admin") redirect("/unauthorized");
 
   /* ─── resolve searchParams ─── */
-  const { owner = "", query = "" } = (await searchParams) ?? {}; // ⚠️ <— no warning
+  // const { owner = "", query = "" } = (await searchParams) ?? {}; // ⚠️ <— no warning
+    const { owner = "", query = "" } = searchParams;
 
   /* ────── fetch + filter apiaries ────── */
   const apiaries = (await getAllApiaries()).map((apiary) => ({
