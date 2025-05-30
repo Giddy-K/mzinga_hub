@@ -1,16 +1,23 @@
 "use client";
 
 import { json2csv } from "@/lib/utils/json2csv";
+import clsx from "clsx";
 
-export default function ExportCSVButton({
+interface ExportCSVButtonProps<T extends object> {
+  //  extends object
+  data: T[];
+  filename: string;
+  className?: string;
+}
+
+export default function ExportCSVButton<T extends object>({
+  //   extends object
   data,
   filename,
-}: {
-  data: any[];
-  filename: string;
-}) {
+  className,
+}: ExportCSVButtonProps<T>) {
   const handleExport = async () => {
-    const csv = await json2csv(data);
+    const csv = json2csv(data); // no await needed (json2csv is sync)
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
 
@@ -24,7 +31,10 @@ export default function ExportCSVButton({
   return (
     <button
       onClick={handleExport}
-      className="ml-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+      className={clsx(
+        "ml-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700",
+        className
+      )}
     >
       Export CSV
     </button>
