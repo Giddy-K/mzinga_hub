@@ -1,108 +1,113 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
+import type { User, Session } from "next-auth";
+import type { JWT } from "next-auth/jwt";
+
+/* Auth configuration */
 export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
+
+  /* Providers */
   providers: [
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID!,
       clientSecret: process.env.AUTH_GOOGLE_SECRET!,
     }),
+
     CredentialsProvider({
       name: "Credentials",
+
       credentials: {
-        email: { label: "Email", type: "email" },
+        email:    { label: "Email",    type: "email"    },
         password: { label: "Password", type: "password" },
-        name: { label: "Name", type: "text", optional: true },
+        name:     { label: "Name",     type: "text", optional: true },
       },
-      async authorize(credentials) {
-        const { email, password, name } = credentials!;
-        const userId = email; // Still using email as ID here; will use UID in session and Firestore if available
 
-        const userRef = doc(db, "users", userId);
-        const userSnap = await getDoc(userRef);
+      async authorize(
+        credentials?: Partial<Record<"email" | "password" | "name", unknown>>,
+      ): Promise<User | null> {
+        /* runtime validation – keep it simple */
+        const email    = credentials?.email as string | undefined;
+        const password = credentials?.password as string | undefined;
+        const name     = credentials?.name as string | undefined;
 
-        if (userSnap.exists()) {
-          const user = userSnap.data();
+        if (!email || !password) return null;
 
-          if (user.password === password) {
-            return { id: userId, email, name: user.name || email };
-          } else {
-            throw new Error("Invalid credentials");
+        const userRef = doc(db, "users", email);
+        const snap    = await getDoc(userRef);
+
+        /* Existing user → check password */
+        if (snap.exists()) {
+          const stored = snap.data() as { password: string; name?: string };
+          if (stored.password === password) {
+            return { id: email, email, name: stored.name ?? email };
           }
-        } else {
-          await setDoc(userRef, {
-            name: name || email,
-            email,
-            password, // ⚠️ Hash in production
-            role: "user",
-            createdAt: new Date(),
-          });
-
-          return { id: userId, email, name };
+          throw new Error("Invalid credentials");
         }
+
+        /* New user → create doc */
+        await setDoc(userRef, {
+          name : name ?? email,
+          email,
+          password,                // ⚠️  hash in production
+          role : "user",
+          createdAt: new Date(),
+        });
+
+        return { id: email, email, name: name ?? email };
       },
     }),
   ],
+
+  /* Callbacks */
   callbacks: {
-    async signIn({ user }) {
-      try {
-        // Use the UID provided by Google or fallback to email
-        // const uid = account?.provider === "google"
-        //   ? account.providerAccountId
-        //   : user.id;
-        const email = user.email;
-        if (!email) return false;
+    async signIn({ user }): Promise<boolean> {
+      const email = user.email;
+      if (!email) return false;
 
-        const userRef = doc(db, "users", email);
-        const userSnap = await getDoc(userRef);
+      const userRef = doc(db, "users", email);
+      const snap    = await getDoc(userRef);
 
-        if (!userSnap.exists()) {
-          await setDoc(userRef, {
-            name: user.name,
-            email: user.email,
-            role: "user",
-            createdAt: new Date(),
-          });
-        }
-
-        // Store UID on the user object for the JWT callback
-        // user.id = uid;
-        user.id = email;
-
-        return true;
-      } catch (err) {
-        console.error("Error storing user in Firestore:", err);
-        return false;
+      if (!snap.exists()) {
+        await setDoc(userRef, {
+          name : user.name,
+          email,
+          role : "user",
+          createdAt: new Date(),
+        });
       }
+
+      user.id = email;
+      return true;
     },
-    async jwt({ token, user }) {
+
+    async jwt({ token, user }): Promise<JWT> {
       if (user) {
         token.uid = user.id;
-    
-        // Fetch user role from Firestore
-        const userRef = doc(db, "users", user.email);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          token.role = userData.role;
+
+        if (user.email) {
+          const snap = await getDoc(doc(db, "users", user.email));
+          if (snap.exists()) {
+            token.role = (snap.data() as { role?: "admin" | "user" }).role ?? "user";
+          }
         }
       }
       return token;
-    }
-    ,
-    async session({ session, token }) {
-      if (session.user && token?.uid) {
-        session.user.uid = token.uid;
-        session.user.role = token.role; // ✅ Add this
+    },
+
+    async session({ session, token }): Promise<Session> {
+      if (session.user) {
+        session.user.uid  = token.uid as string | undefined;
+        session.user.role = token.role as "admin" | "user" | undefined;
       }
       return session;
     },
   },
-  pages: {
-    signIn: "/login",
-  },
+
+  pages: { signIn: "/login" },
 });
