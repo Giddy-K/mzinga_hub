@@ -7,12 +7,16 @@ import AdminNavbar from "@/app/components/AdminNavbar";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-/* ─── TYPE for searchParams: a plain object, not a Promise ─── */
+/* ─── TYPE for searchParams: Next.js 15 expects this to be a Promise of an object ─── */
 type Search = { owner?: string; query?: string };
 
-/** Next.js 15 expects `searchParams` to be an object (not a Promise) */
+/** 
+ * Next.js’s own generated PageProps for this file will declare:
+ *   searchParams?: Promise<Record<string,string>>
+ * so we must do the same:
+ */
 interface PageProps {
-  searchParams?: Search;
+  searchParams?: Promise<Search>;
 }
 
 export default async function AdminApiariesPage({ searchParams }: PageProps) {
@@ -20,8 +24,8 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
   const session = await auth();
   if (session?.user?.role !== "admin") redirect("/unauthorized");
 
-  /* ─── resolve searchParams (plain object) ─── */
-  const { owner = "", query = "" } = searchParams ?? {};
+  /* ─── await the Promise (or get `undefined`) ─── */
+  const { owner = "", query = "" } = (await searchParams) ?? {};
 
   /* ─── fetch + massage data ─── */
   const apiaries = (await getAllApiaries()).map((a) => ({
@@ -33,8 +37,8 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
 
   const q = query.toLowerCase();
   const filtered = apiaries.filter((a) => {
-    const okOwner  = owner ? a.ownerId === owner : true;
-    const okQuery  =
+    const okOwner = owner ? a.ownerId === owner : true;
+    const okQuery =
       q === "" ||
       a.title.toLowerCase().includes(q) ||
       a.location.toLowerCase().includes(q);
