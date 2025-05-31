@@ -1,57 +1,53 @@
 // app/admin/apiaries/page.tsx
-import { auth } from "@/auth";
-import { getAllApiaries } from "@/lib/firebase/getAllApiaries";
-import { deleteApiaryById } from "@/lib/firebase/deleteApiary";
-import ExportCSVButton from "@/app/components/ExportCSVButton";
-import AdminNavbar from "@/app/components/AdminNavbar";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { auth } from '@/auth';
+import { getAllApiaries } from '@/lib/firebase/getAllApiaries';
+import { deleteApiaryById } from '@/lib/firebase/deleteApiary';
+import ExportCSVButton from '@/app/components/ExportCSVButton';
+import AdminNavbar from '@/app/components/AdminNavbar';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-/* ---------- helpers ---------- */
+/** what we really expect from the URL */
 type Search = { owner?: string; query?: string };
 
-/** ←---  ONLY a Promise or undefined – exactly what Next.js emits */
-interface PageProps {
-  searchParams?: Search
-}
+/** Let it be either the plain object OR the promise Next.js emits */
+type PageProps = {
+  searchParams?: Search | Promise<Search>;
+};
 
 export default async function AdminApiariesPage({ searchParams }: PageProps) {
-  /* auth */
+  /* ─── auth ─── */
   const session = await auth();
-  if (session?.user?.role !== "admin") redirect("/unauthorized");
+  if (session?.user?.role !== 'admin') redirect('/unauthorized');
 
-  /* await the promise (works when undefined too) */
-  const { owner = "", query = "" } = searchParams ?? {};
+  /* ─── normalise search params ─── */
+  const { owner = '', query = '' } = (await searchParams) ?? {};
 
-  /* data */
-  const apiaries = (await getAllApiaries()).map((a) => ({
+  /* ─── data ─── */
+  const apiaries = (await getAllApiaries()).map(a => ({
     ...a,
     dateAdded: a.dateAdded ?? new Date().toISOString(),
   }));
-  const owners = [...new Set(apiaries.map((a) => a.ownerId).filter(Boolean))];
+  const owners = [...new Set(apiaries.map(a => a.ownerId).filter(Boolean))];
 
   const q = query.toLowerCase();
-  const filtered = apiaries.filter((a) => {
-    const okOwner  = owner ? a.ownerId === owner : true;
-    const okQuery  =
-      q === "" ||
+  const filtered = apiaries.filter(a => {
+    const okOwner = owner ? a.ownerId === owner : true;
+    const okQuery =
+      !q ||
       a.title.toLowerCase().includes(q) ||
       a.location.toLowerCase().includes(q);
     return okOwner && okQuery;
   });
 
-
-  /* UI */
+  /* ─── UI ─── */
   return (
     <>
       <AdminNavbar />
-
       <section className="min-h-screen mt-6 bg-white px-6 py-12">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">
-          All Apiaries
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">All Apiaries</h1>
 
-        {/* ------- filters ------- */}
+        {/* filters */}
         <form className="mb-6 flex flex-wrap gap-4 items-center">
           <input
             name="query"
@@ -59,22 +55,19 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
             placeholder="Search title / location…"
             className="border border-gray-300 px-3 py-2 rounded-md"
           />
-
           <select
             name="owner"
             defaultValue={owner}
             className="border border-gray-300 px-3 py-2 rounded-md"
           >
             <option value="">All owners</option>
-            {owners.map((o) => (
+            {owners.map(o => (
               <option key={o}>{o}</option>
             ))}
           </select>
-
-          <button className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600">
+          <button className="px-4 py-2 bg-amber-500 text-white rounded-md">
             Filter
           </button>
-
           <ExportCSVButton
             data={filtered}
             filename="apiaries.csv"
@@ -82,7 +75,7 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
           />
         </form>
 
-        {/* ------- table ------- */}
+        {/* table */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-lg shadow-md">
             <thead>
@@ -95,9 +88,8 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
                 <th className="px-4 py-3">Actions</th>
               </tr>
             </thead>
-
             <tbody>
-              {filtered.map((a) => (
+              {filtered.map(a => (
                 <tr key={a.id} className="border-b">
                   <td className="px-4 py-3 font-medium">{a.title}</td>
                   <td className="px-4 py-3">{a.location}</td>
@@ -115,12 +107,11 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
                     >
                       View
                     </Link>
-
                     <form
                       action={async () => {
-                        "use server";
+                        'use server';
                         await deleteApiaryById(a.id);
-                        redirect("/admin/apiaries");
+                        redirect('/admin/apiaries');
                       }}
                     >
                       <button className="text-red-600 hover:underline">
