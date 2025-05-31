@@ -1,20 +1,14 @@
-import { auth } from "@/auth";
-import { getUserLogs } from "@/lib/admin/getUserLogs";
-import { notFound } from "next/navigation";
+import { auth } from '@/auth';
+import { getUserLogs } from '@/lib/admin/getUserLogs';
+import { notFound } from 'next/navigation';
 
-// type Params = { id: string };
-
-interface PageProps {
-  params: { id: string };          // ← only Promise
-}
+type PageProps = { params: { id: string } };
 
 export default async function AdminUserLogsPage({ params }: PageProps) {
-  /* auth guard */
   const session = await auth();
-  if (session?.user?.role !== "admin") notFound();
+  if (session?.user?.role !== 'admin') notFound();
 
-  const { id } = params;      // ← await here
-
+  const { id } = params;
   const logs = await getUserLogs(id);
 
   if (logs.length === 0) {
@@ -24,6 +18,7 @@ export default async function AdminUserLogsPage({ params }: PageProps) {
       </div>
     );
   }
+
   return (
     <section className="min-h-screen bg-white px-6 py-12">
       <h1 className="text-2xl font-bold mb-6">Logs for {id}</h1>
@@ -31,13 +26,13 @@ export default async function AdminUserLogsPage({ params }: PageProps) {
         {logs.map((log, i) => (
           <div
             key={i}
-            className="border p-4 rounded-lg shadow-sm bg-gray-50 text-sm text-gray-800"
+            className="border p-4 rounded-lg shadow-sm bg-gray-50 text-sm"
           >
             <p>
               <strong>Action:</strong> {log.action}
             </p>
             <p>
-              <strong>Timestamp:</strong>{" "}
+              <strong>Timestamp:</strong>{' '}
               {new Date(log.timestamp).toLocaleString()}
             </p>
             {log.details && (
