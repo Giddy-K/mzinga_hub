@@ -8,7 +8,12 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-export const authOptions: NextAuthOptions = {
+/**
+ * 1. Make authOptions a local constant (do NOT export it).
+ * 2. We type it as NextAuthOptions so that all callback parameters
+ *    (signIn, jwt, session) have proper types instead of `any`.
+ */
+const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
   providers: [
     GoogleProvider({
@@ -31,6 +36,7 @@ export const authOptions: NextAuthOptions = {
         const userRef = doc(db, "users", email);
         const snap    = await getDoc(userRef);
 
+        // If user already exists, check password
         if (snap.exists()) {
           const stored = snap.data() as { password: string; name?: string };
           if (stored.password === password) {
@@ -39,11 +45,11 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid credentials");
         }
 
-        // If user does not exist, create them:
+        // Otherwise, create a new Firestore record
         await setDoc(userRef, {
           name:      name ?? email,
           email,
-          password,     // ⚠ Make sure to hash in production!
+          password,     // ⚠ In production you should hash this
           role:      "user",
           createdAt: new Date(),
         });
@@ -53,7 +59,9 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    // `signIn` callback gets typed parameters
+    /**
+     * `signIn` callback is now fully typed. `user` is known to be a NextAuth User.
+     */
     async signIn({ user }) {
       if (!user.email) return false;
       const userRef = doc(db, "users", user.email);
@@ -66,11 +74,14 @@ export const authOptions: NextAuthOptions = {
           createdAt: new Date(),
         });
       }
+      // Add `id` field to NextAuth’s User object
       user.id = user.email;
       return true;
     },
 
-    // `jwt` callback gets typed parameters
+    /**
+     * `jwt` callback is fully typed: `token: JWT`, `user?: User`.
+     */
     async jwt({ token, user }) {
       if (user) {
         token.uid = user.id;
@@ -84,7 +95,9 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
-    // `session` callback gets typed parameters
+    /**
+     * `session` callback is fully typed: `session: Session`, `token: JWT`.
+     */
     async session({ session, token }) {
       if (session.user) {
         session.user.uid  = token.uid   as string | undefined;
@@ -98,12 +111,15 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
 
-  debug: true,
+  debug: true, // prints helpful debug logs if something goes wrong
 };
 
+/**
+ * 3. Wrap `NextAuth(authOptions)` in named `GET`/`POST` functions.
+ *    These are the only exports in this file—no `export const authOptions`.
+ */
 const handler = NextAuth(authOptions);
 
-// Wrap the NextAuth handler inside proper GET/POST route functions:
 export async function GET(request: Request) {
   return handler(request);
 }
