@@ -7,45 +7,50 @@ import AdminNavbar from "@/app/components/AdminNavbar";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-/* ---------- correct type ---------- */
-type PageProps = {
-  searchParams?: Promise<{ owner?: string; query?: string }>;
-};
+/* ─── TYPE for searchParams: a plain object, not a Promise ─── */
+type Search = { owner?: string; query?: string };
+
+/** Next.js 15 expects `searchParams` to be an object (not a Promise) */
+interface PageProps {
+  searchParams?: Search;
+}
 
 export default async function AdminApiariesPage({ searchParams }: PageProps) {
-  // ✅ await the params Promise (handles undefined too)
-  const { owner = "", query = "" } = (await searchParams) ?? {};
-
-  // ✅ Auth guard
+  /* ─── auth guard ─── */
   const session = await auth();
   if (session?.user?.role !== "admin") redirect("/unauthorized");
 
-  // ✅ Data
+  /* ─── resolve searchParams (plain object) ─── */
+  const { owner = "", query = "" } = searchParams ?? {};
+
+  /* ─── fetch + massage data ─── */
   const apiaries = (await getAllApiaries()).map((a) => ({
     ...a,
     dateAdded: a.dateAdded ?? new Date().toISOString(),
   }));
 
   const owners = [...new Set(apiaries.map((a) => a.ownerId).filter(Boolean))];
+
   const q = query.toLowerCase();
   const filtered = apiaries.filter((a) => {
-    const matchOwner = owner ? a.ownerId === owner : true;
-    const matchQuery =
+    const okOwner  = owner ? a.ownerId === owner : true;
+    const okQuery  =
       q === "" ||
       a.title.toLowerCase().includes(q) ||
       a.location.toLowerCase().includes(q);
-    return matchOwner && matchQuery;
+    return okOwner && okQuery;
   });
 
-  // ✅ UI
+  /* ─── UI ─── */
   return (
     <>
       <AdminNavbar />
+
       <section className="min-h-screen mt-6 bg-white px-6 py-12">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">All Apiaries</h1>
 
         {/* Filters */}
-        <form className="mb-6 flex flex-wrap gap-4 items-center">
+        <form className="mb-6 flex flex-wrap gap-4 items-center" method="GET">
           <input
             name="query"
             defaultValue={query}
@@ -60,11 +65,16 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
           >
             <option value="">All owners</option>
             {owners.map((o) => (
-              <option key={o}>{o}</option>
+              <option key={o} value={o}>
+                {o}
+              </option>
             ))}
           </select>
 
-          <button className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600"
+          >
             Filter
           </button>
 
@@ -88,14 +98,15 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
                 <th className="px-4 py-3">Actions</th>
               </tr>
             </thead>
-
             <tbody>
               {filtered.map((a) => (
                 <tr key={a.id} className="border-b">
                   <td className="px-4 py-3 font-medium">{a.title}</td>
                   <td className="px-4 py-3">{a.location}</td>
                   <td className="px-4 py-3">{a.numberOfHives}</td>
-                  <td className="px-4 py-3 text-sm text-gray-500">{a.ownerId}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">
+                    {a.ownerId}
+                  </td>
                   <td className="px-4 py-3 text-sm">
                     {new Date(a.dateAdded).toLocaleDateString()}
                   </td>
@@ -114,10 +125,7 @@ export default async function AdminApiariesPage({ searchParams }: PageProps) {
                         redirect("/admin/apiaries");
                       }}
                     >
-                      <button
-                        type="submit"
-                        className="text-red-600 hover:underline"
-                      >
+                      <button className="text-red-600 hover:underline">
                         Delete
                       </button>
                     </form>
