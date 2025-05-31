@@ -2,19 +2,21 @@
 // export const { GET, POST } = handlers
 
 // app/api/auth/[...nextauth]/route.ts
-import NextAuth, { type NextAuthOptions } from "next-auth";
+
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 /**
- * 1. Make authOptions a local constant (do NOT export it).
- * 2. We type it as NextAuthOptions so that all callback parameters
- *    (signIn, jwt, session) have proper types instead of `any`.
+ * 1. `authOptions` is a plain `const` (not exported).
+ * 2. We do NOT try to import `NextAuthOptions` because
+ *    in your version of next‐auth that type is not exposed this way.
  */
-const authOptions: NextAuthOptions = {
+const authOptions = {
   secret: process.env.AUTH_SECRET,
+
   providers: [
     GoogleProvider({
       clientId:     process.env.AUTH_GOOGLE_ID!,
@@ -36,7 +38,6 @@ const authOptions: NextAuthOptions = {
         const userRef = doc(db, "users", email);
         const snap    = await getDoc(userRef);
 
-        // If user already exists, check password
         if (snap.exists()) {
           const stored = snap.data() as { password: string; name?: string };
           if (stored.password === password) {
@@ -45,11 +46,11 @@ const authOptions: NextAuthOptions = {
           throw new Error("Invalid credentials");
         }
 
-        // Otherwise, create a new Firestore record
+        // If user does not exist, create them:
         await setDoc(userRef, {
           name:      name ?? email,
           email,
-          password,     // ⚠ In production you should hash this
+          password,     // ⚠ Remember to hash in production
           role:      "user",
           createdAt: new Date(),
         });
@@ -60,7 +61,7 @@ const authOptions: NextAuthOptions = {
 
   callbacks: {
     /**
-     * `signIn` callback is now fully typed. `user` is known to be a NextAuth User.
+     * `signIn({ user })` is now correctly typed for your version of NextAuth.
      */
     async signIn({ user }) {
       if (!user.email) return false;
@@ -74,13 +75,13 @@ const authOptions: NextAuthOptions = {
           createdAt: new Date(),
         });
       }
-      // Add `id` field to NextAuth’s User object
+      // Attach `id` onto NextAuth’s `user`
       user.id = user.email;
       return true;
     },
 
     /**
-     * `jwt` callback is fully typed: `token: JWT`, `user?: User`.
+     * `jwt({ token, user })`—also properly typed.
      */
     async jwt({ token, user }) {
       if (user) {
@@ -96,7 +97,7 @@ const authOptions: NextAuthOptions = {
     },
 
     /**
-     * `session` callback is fully typed: `session: Session`, `token: JWT`.
+     * `session({ session, token })`—also properly typed.
      */
     async session({ session, token }) {
       if (session.user) {
@@ -111,15 +112,15 @@ const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
 
-  debug: true, // prints helpful debug logs if something goes wrong
+  debug: true,
 };
 
-/**
- * 3. Wrap `NextAuth(authOptions)` in named `GET`/`POST` functions.
- *    These are the only exports in this file—no `export const authOptions`.
- */
+// Create the NextAuth handler:
 const handler = NextAuth(authOptions);
 
+/**
+ * 3. Only `export` the HTTP methods that Next.js expects:
+ */
 export async function GET(request: Request) {
   return handler(request);
 }
