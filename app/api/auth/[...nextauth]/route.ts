@@ -1,26 +1,15 @@
 // import { handlers } from "@/auth" // Referring to the auth.ts we created
 // export const { GET, POST } = handlers
 
-// app/api/auth/[...nextauth]/route.ts
-
+// ✅ app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-/**
- * You may keep this `authOptions` object here if you need to reference
- * it elsewhere (e.g. in getServerSession). Just do NOT export it as a
- * Next.js route handler—only export GET/POST below.
- */
 const authOptions = {
   secret: process.env.AUTH_SECRET,
-  pages: {
-    signIn: "/login",
-  },
-  debug: true,
-
   providers: [
     GoogleProvider({
       clientId:     process.env.AUTH_GOOGLE_ID!,
@@ -29,7 +18,7 @@ const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email:    { label: "Email",    type: "email"    },
+        email:    { label: "Email",    type: "email" },
         password: { label: "Password", type: "password" },
         name:     { label: "Name",     type: "text", optional: true },
       },
@@ -39,10 +28,8 @@ const authOptions = {
         const name     = credentials?.name     as string | undefined;
         if (!email || !password) return null;
 
-        // Look up the user in Firestore
         const userRef = doc(db, "users", email);
         const snap    = await getDoc(userRef);
-
         if (snap.exists()) {
           const stored = snap.data() as { password: string; name?: string };
           if (stored.password === password) {
@@ -51,28 +38,24 @@ const authOptions = {
           throw new Error("Invalid credentials");
         }
 
-        // If user doesn't exist, create a new user document
+        // Create new Firestore record if not found
         await setDoc(userRef, {
           name:      name ?? email,
           email,
-          password,        // 👉 In production, you must hash this
+          password,     // ⚠ hash in prod
           role:      "user",
           createdAt: new Date(),
         });
-
         return { id: email, email, name: name ?? email };
       },
     }),
   ],
-
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false;
       const userRef = doc(db, "users", user.email);
       const snap    = await getDoc(userRef);
-
       if (!snap.exists()) {
-        // First‐time Google sign‐in → add to Firestore
         await setDoc(userRef, {
           name:      user.name,
           email:     user.email,
@@ -80,11 +63,9 @@ const authOptions = {
           createdAt: new Date(),
         });
       }
-
-      user.id = user.email; // store email as id on the JWT
+      user.id = user.email;
       return true;
     },
-
     async jwt({ token, user }) {
       if (user) {
         token.uid = user.id;
@@ -97,18 +78,28 @@ const authOptions = {
       }
       return token;
     },
-
     async session({ session, token }) {
       if (session.user) {
-        session.user.uid  = token.uid  as string | undefined;
-        session.user.role = token.role as "admin" | "user" | undefined;
+        session.user.uid  = token.uid   as string | undefined;
+        session.user.role = token.role  as "admin" | "user" | undefined;
       }
       return session;
     },
   },
+  pages: {
+    signIn: "/login",
+  },
+  debug: true,
 };
 
-// Create a NextAuth handler, then export it under BOTH GET and POST.
-// That is exactly what the App Router expects at runtime.
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+
+// Wrap the handler in explicit GET/POST functions so that Next.js’s App Router
+// sees valid function signatures (Request → Response).
+export async function GET(request: Request) {
+  return handler(request);
+}
+
+export async function POST(request: Request) {
+  return handler(request);
+}
