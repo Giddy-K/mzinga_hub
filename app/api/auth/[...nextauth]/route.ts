@@ -1,14 +1,14 @@
 // import { handlers } from "@/auth" // Referring to the auth.ts we created
 // export const { GET, POST } = handlers
 
-// ✅ app/api/auth/[...nextauth]/route.ts
-import NextAuth from "next-auth";
+// app/api/auth/[...nextauth]/route.ts
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-const authOptions = {
+export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
   providers: [
     GoogleProvider({
@@ -30,6 +30,7 @@ const authOptions = {
 
         const userRef = doc(db, "users", email);
         const snap    = await getDoc(userRef);
+
         if (snap.exists()) {
           const stored = snap.data() as { password: string; name?: string };
           if (stored.password === password) {
@@ -38,11 +39,11 @@ const authOptions = {
           throw new Error("Invalid credentials");
         }
 
-        // Create new Firestore record if not found
+        // If user does not exist, create them:
         await setDoc(userRef, {
           name:      name ?? email,
           email,
-          password,     // ⚠ hash in prod
+          password,     // ⚠ Make sure to hash in production!
           role:      "user",
           createdAt: new Date(),
         });
@@ -50,7 +51,9 @@ const authOptions = {
       },
     }),
   ],
+
   callbacks: {
+    // `signIn` callback gets typed parameters
     async signIn({ user }) {
       if (!user.email) return false;
       const userRef = doc(db, "users", user.email);
@@ -66,6 +69,8 @@ const authOptions = {
       user.id = user.email;
       return true;
     },
+
+    // `jwt` callback gets typed parameters
     async jwt({ token, user }) {
       if (user) {
         token.uid = user.id;
@@ -78,6 +83,8 @@ const authOptions = {
       }
       return token;
     },
+
+    // `session` callback gets typed parameters
     async session({ session, token }) {
       if (session.user) {
         session.user.uid  = token.uid   as string | undefined;
@@ -86,16 +93,17 @@ const authOptions = {
       return session;
     },
   },
+
   pages: {
     signIn: "/login",
   },
+
   debug: true,
 };
 
 const handler = NextAuth(authOptions);
 
-// Wrap the handler in explicit GET/POST functions so that Next.js’s App Router
-// sees valid function signatures (Request → Response).
+// Wrap the NextAuth handler inside proper GET/POST route functions:
 export async function GET(request: Request) {
   return handler(request);
 }
