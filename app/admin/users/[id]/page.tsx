@@ -3,23 +3,16 @@ import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 
-type Params = { id: string };
-
 interface PageProps {
-  /** Next.js passes `params` as a Promise in prod-build */
-  params?: Promise<Params>;
+  params: { id: string };
 }
 
 export default async function AdminUserLogsPage({ params }: PageProps) {
-  /* ---------- auth guard ---------- */
+  /* auth guard */
   const session = await auth();
   if (session?.user?.role !== "admin") notFound();
 
-  /* ---------- pull user-id from the awaited params ---------- */
-  const { id } = (await params) ?? {};
-  if (!id) notFound();
-
-  /* ---------- fetch logs ---------- */
+  const { id } = params;
   const logs = await getUserLogs(id);
 
   if (logs.length === 0) {
@@ -29,8 +22,6 @@ export default async function AdminUserLogsPage({ params }: PageProps) {
       </div>
     );
   }
-
-  /* ---------- UI ---------- */
   return (
     <section className="min-h-screen bg-white px-6 py-12">
       <h1 className="text-2xl font-bold mb-6">Logs for {id}</h1>
@@ -44,8 +35,7 @@ export default async function AdminUserLogsPage({ params }: PageProps) {
               <strong>Action:</strong> {log.action}
             </p>
             <p>
-              <strong>Timestamp:</strong>{" "}
-              {new Date(log.timestamp).toLocaleString()}
+              <strong>Timestamp:</strong> {new Date(log.timestamp).toLocaleString()}
             </p>
             {log.details && (
               <p>
