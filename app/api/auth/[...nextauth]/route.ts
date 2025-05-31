@@ -1,39 +1,32 @@
-// import { handlers } from "@/auth" // Referring to the auth.ts we created
-// export const { GET, POST } = handlers
-
-// app/api/auth/[...nextauth]/route.ts
-import NextAuth from "next-auth";
+// ✅ app/api/auth/[...nextauth]/route.ts
+import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export const authOptions = {
   secret: process.env.AUTH_SECRET,
-
   providers: [
     GoogleProvider({
-      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientId:     process.env.AUTH_GOOGLE_ID!,
       clientSecret: process.env.AUTH_GOOGLE_SECRET!,
     }),
-
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email:    { label: "Email",    type: "email"    },
+        email:    { label: "Email",    type: "email" },
         password: { label: "Password", type: "password" },
         name:     { label: "Name",     type: "text", optional: true },
       },
       async authorize(credentials) {
-        const email    = credentials?.email as string | undefined;
+        const email    = credentials?.email    as string | undefined;
         const password = credentials?.password as string | undefined;
-        const name     = credentials?.name as string | undefined;
+        const name     = credentials?.name     as string | undefined;
         if (!email || !password) return null;
 
         const userRef = doc(db, "users", email);
         const snap    = await getDoc(userRef);
-
         if (snap.exists()) {
           const stored = snap.data() as { password: string; name?: string };
           if (stored.password === password) {
@@ -41,12 +34,11 @@ export const authOptions = {
           }
           throw new Error("Invalid credentials");
         }
-
-        // New user, create Firestore record
+        // new user → create Firestore record
         await setDoc(userRef, {
           name:      name ?? email,
           email,
-          password,        // ← you should hash in production
+          password,        // ↪ hash in production
           role:      "user",
           createdAt: new Date(),
         });
@@ -57,22 +49,18 @@ export const authOptions = {
 
   callbacks: {
     async signIn({ user }) {
-      const email = user.email;
-      if (!email) return false;
-
-      // Ensure there’s a Firestore doc
-      const userRef = doc(db, "users", email);
+      if (!user.email) return false;
+      const userRef = doc(db, "users", user.email);
       const snap    = await getDoc(userRef);
       if (!snap.exists()) {
         await setDoc(userRef, {
           name:      user.name,
-          email,
+          email:     user.email,
           role:      "user",
           createdAt: new Date(),
         });
       }
-
-      user.id = email;
+      user.id = user.email;
       return true;
     },
 
@@ -91,8 +79,8 @@ export const authOptions = {
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.uid   = token.uid as string | undefined;
-        session.user.role  = token.role as "admin" | "user" | undefined;
+        session.user.uid  = token.uid   as string | undefined;
+        session.user.role = token.role  as "admin" | "user" | undefined;
       }
       return session;
     },
@@ -102,8 +90,9 @@ export const authOptions = {
     signIn: "/login",
   },
 
-  // Turn on debug so you can see “Configuration” errors in the Vercel logs:
-  debug: true,
+  debug: true, // enable to see config errors in logs
 };
 
-export default NextAuth(authOptions);
+// In App-Router, you export NextAuth as named GET/POST handlers:
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };
