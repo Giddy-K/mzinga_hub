@@ -10,31 +10,31 @@ function toStr(v: FormDataEntryValue | null): string | undefined {
 }
 
 interface PageProps {
-  params: { id: string };    // ← plain object, NOT a Promise
+  params: Promise<{ id: string }>; // ❗ Fix: mark as Promise
 }
 
 export default async function EditApiaryPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params; // ❗ Fix: await params
   const session = await auth();
 
-  /* 🔑 Use Admin SDK to bypass Realtime‐DB rules */
   const snapshot = await adminDB.ref(`apiaries/${id}`).get();
   if (!snapshot.exists()) return notFound();
 
   const apiary = snapshot.val();
-  /* Access control: owner or admin */
-  if (apiary.ownerId !== session?.user?.email && session?.user?.role !== "admin")
-    return notFound();
+  const isOwner = apiary.ownerId === session?.user?.email;
+  const isAdmin = session?.user?.role === "admin";
+
+  if (!isOwner && !isAdmin) return notFound();
 
   return (
     <form
       action={async (formData) => {
         "use server";
         const updatedData: ApiaryUpdateData = {
-          title:         toStr(formData.get("title")),
-          location:      toStr(formData.get("location")),
+          title: toStr(formData.get("title")),
+          location: toStr(formData.get("location")),
           numberOfHives: Number(formData.get("numberOfHives") || 0),
-          notes:         toStr(formData.get("notes")),
+          notes: toStr(formData.get("notes")),
         };
         await updateApiaryAction(id, updatedData);
       }}
