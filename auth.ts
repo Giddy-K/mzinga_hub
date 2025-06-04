@@ -23,23 +23,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       name: "Credentials",
 
       credentials: {
-        email:    { label: "Email",    type: "email"    },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
-        name:     { label: "Name",     type: "text", optional: true },
+        name: { label: "Name", type: "text", optional: true },
       },
 
       async authorize(
         credentials?: Partial<Record<"email" | "password" | "name", unknown>>,
       ): Promise<User | null> {
         /* runtime validation – keep it simple */
-        const email    = credentials?.email as string | undefined;
+        const email = credentials?.email as string | undefined;
         const password = credentials?.password as string | undefined;
-        const name     = credentials?.name as string | undefined;
+        const name = credentials?.name as string | undefined;
 
         if (!email || !password) return null;
 
         const userRef = doc(db, "users", email);
-        const snap    = await getDoc(userRef);
+        const snap = await getDoc(userRef);
 
         /* Existing user → check password */
         if (snap.exists()) {
@@ -52,10 +52,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         /* New user → create doc */
         await setDoc(userRef, {
-          name : name ?? email,
+          name: name ?? email,
           email,
           password,                // ⚠️  hash in production
-          role : "user",
+          role: "user",
           createdAt: new Date(),
         });
 
@@ -71,13 +71,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (!email) return false;
 
       const userRef = doc(db, "users", email);
-      const snap    = await getDoc(userRef);
+      const snap = await getDoc(userRef);
 
       if (!snap.exists()) {
         await setDoc(userRef, {
-          name : user.name,
+          name: user.name,
           email,
-          role : "user",
+          role: "user",
           createdAt: new Date(),
         });
       }
@@ -102,10 +102,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     async session({ session, token }): Promise<Session> {
       if (session.user) {
-        session.user.uid  = token.uid as string | undefined;
+        session.user.uid = token.uid as string | undefined;
         session.user.role = token.role as "admin" | "user" | undefined;
       }
       return session;
+    },
+
+    async redirect({  baseUrl }) {
+      return `${baseUrl}/account/redirect`;
     },
   },
 
