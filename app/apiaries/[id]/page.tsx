@@ -1,4 +1,3 @@
-// app/apiaries/[id]/page.tsx
 import { adminDB } from "@/lib/firebase-admin";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
@@ -6,11 +5,11 @@ import Link from "next/link";
 import { deleteApiaryAction } from "@/app/actions/deleteApiaryAction";
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>; // ✅ FIX: must be Promise
 }
 
 export default async function ApiaryDetails({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params; // ✅ FIX: await the promise
   const session = await auth();
 
   const snap = await adminDB.ref(`apiaries/${id}`).get();
