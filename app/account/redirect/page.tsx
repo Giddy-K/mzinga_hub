@@ -1,10 +1,9 @@
-// app/account/redirect/page.tsx
 "use client";
 
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { checkUserRoleAndRedirect } from "@/lib/checkRoleAndRedirect";
 import { useRouter } from "next/navigation";
-import { getUserRole } from "@/lib/getUserRole";
 import FullScreenLoader from "@/app/components/FullScreenLoader";
 
 export default function RedirectPage() {
@@ -12,28 +11,18 @@ export default function RedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const redirect = async () => {
+    const handleRedirect = async () => {
       if (status === "loading") return;
 
-      const email = session?.user?.email;
-      if (!email) {
-        router.push("/unauthorized");
-        return;
-      }
-
-      const role = await getUserRole(email);
-
-      if (role === "admin") {
-        router.push("/admin/dashboard");
-      } else if (role === "user") {
-        router.push("/dashboard"); // or "/" if that's your user landing page
+      if (session?.user?.email) {
+        await checkUserRoleAndRedirect(session.user.email, router);
       } else {
         router.push("/unauthorized");
       }
     };
 
-    redirect();
-  }, [status, session, router]);
+    handleRedirect();
+  }, [router, session, status]);
 
   return <FullScreenLoader />;
 }
