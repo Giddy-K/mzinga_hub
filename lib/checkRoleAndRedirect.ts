@@ -12,6 +12,7 @@ export async function checkUserRoleAndRedirect(
 
     if (docSnap.exists()) {
       const role = docSnap.data().role;
+      console.log("Firestore Role:", role);
 
       if (role === "admin") {
         router.push("/admin/dashboard");
@@ -24,6 +25,7 @@ export async function checkUserRoleAndRedirect(
       console.log("No such user document!");
       router.push("/unauthorized");
     }
+
   } catch (error) {
     console.error("Error checking user role:", error);
     router.push("/unauthorized");
