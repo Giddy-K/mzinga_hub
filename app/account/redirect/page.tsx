@@ -22,6 +22,8 @@ export default function RedirectPage() {
     };
 
     handleRedirect();
+    console.log("Session:", session);
+    console.log("Status:", status);
   }, [router, session, status]);
 
   return <FullScreenLoader />;
