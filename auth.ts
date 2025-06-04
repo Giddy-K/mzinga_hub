@@ -77,9 +77,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         await setDoc(userRef, {
           name: user.name,
           email,
-          role: "user",
+          role: "user", // ✅ Default only if new user
           createdAt: new Date(),
         });
+      } else {
+        // Preserve existing role if already created manually
+        const data = snap.data();
+        user.role = data?.role ?? "user"; // Optional: to store in user obj
       }
 
       user.id = email;
@@ -108,9 +112,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
 
-    async redirect({  baseUrl }) {
+    async redirect({ baseUrl, url }) {
+      console.log("REDIRECT to:", url);
       return `${baseUrl}/account/redirect`;
     },
+
   },
 
   pages: { signIn: "/login" },
