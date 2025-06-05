@@ -4,21 +4,22 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-  const { pathname } = req.nextUrl;
+  const pathname = req.nextUrl.pathname;
 
-  // 🔐 Require login for protected paths
   if (!token && (pathname.startsWith("/admin") || pathname.startsWith("/user"))) {
     return NextResponse.redirect(new URL("/account", req.url));
   }
 
-  // 🔒 Admin-only routes
-  if (pathname.startsWith("/admin") && token?.role !== "admin") {
-    return NextResponse.redirect(new URL("/unauthorized", req.url));
-  }
+  if (token) {
+    const role = token.role;
 
-  // 🔒 User-only routes
-  if (pathname.startsWith("/user") && token?.role !== "user") {
-    return NextResponse.redirect(new URL("/unauthorized", req.url));
+    if (pathname.startsWith("/admin") && role !== "admin") {
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
+    }
+
+    if (pathname.startsWith("/user") && role !== "user") {
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
+    }
   }
 
   return NextResponse.next();

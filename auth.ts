@@ -119,9 +119,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     //   console.log("REDIRECT to:", url);
     //   return `${baseUrl}/account/redirect`;
     // },
-    redirect({ baseUrl }) {
-      return `${baseUrl}/account/redirect`;
-    },
+    // redirect({ baseUrl }) {
+    //   return `${baseUrl}/account/redirect`;
+    // },
 
 
   },
