@@ -24,33 +24,23 @@
 //   return <FullScreenLoader />;
 // }
 
-"use client";
+// app/account/redirect/page.tsx
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+export default async function RedirectPage() {
+  const session = await auth();
 
-export default function RedirectPage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  if (!session || !session.user?.role) {
+    redirect("/unauthorized");
+  }
 
-  useEffect(() => {
-    if (status === "loading") return;
-
-    const role = session?.user?.role;
-
-    if (role === "admin") {
-      router.replace("/admin/dashboard");
-    } else if (role === "user") {
-      router.replace("/");
-    } else {
-      router.replace("/unauthorized");
-    }
-  }, [status, session, router]);
-
-  return (
-    <div className="min-h-screen flex items-center justify-center text-lg font-semibold text-gray-700">
-      Redirecting based on role...
-    </div>
-  );
+  if (session.user.role === "admin") {
+    redirect("/admin/dashboard");
+  } else if (session.user.role === "user") {
+    redirect("/");
+  } else {
+    redirect("/unauthorized");
+  }
 }
+
