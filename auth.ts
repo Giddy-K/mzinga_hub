@@ -1,4 +1,4 @@
-// auth.ts (root)
+// auth.ts
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -50,25 +50,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      const ref = doc(db, "users", user.email!);
-      const snap = await getDoc(ref);
-
-      if (!snap.exists()) {
-        await setDoc(ref, {
-          name: user.name,
-          email: user.email,
-          role: "user",
-          createdAt: new Date(),
-        });
-      }
-
-      return true;
-    },
     async jwt({ token, user }) {
       if (user?.email) {
         const snap = await getDoc(doc(db, "users", user.email));
-        token.role = snap.data()?.role ?? "user";
+        const role = snap.data()?.role ?? "user";
+        token.role = role;
         token.uid = user.email;
       }
       return token;

@@ -103,9 +103,7 @@ export default function LoginForm() {
 
         <button
           type="button"
-          onClick={() =>
-            signIn("google", { callbackUrl: "/account/redirect" })
-          }
+          onClick={() => signIn("google", { callbackUrl: "/account/redirect" })}
           className="w-full flex items-center justify-center gap-3 border border-gray-300 text-gray-700 bg-white py-2 rounded-lg hover:bg-gray-100 transition"
         >
           <FaGoogle className="text-xl text-red-500" />
