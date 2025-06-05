@@ -102,16 +102,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }
         }
       }
+      console.log("JWT Callback: role", token.role);
+
       return token;
     },
 
     async session({ session, token }): Promise<Session> {
       if (session.user) {
-        session.user = {
-          ...session.user,
-          uid: token.uid as string | undefined,
-          role: (token.role as "admin" | "user") ?? "user",
-        };
+        session.user.uid = token.uid as string | undefined;
+        session.user.role = (token.role as "admin" | "user") ?? "user";
       }
       return session;
     },
