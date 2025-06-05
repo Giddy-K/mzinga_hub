@@ -87,6 +87,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       user.id = email;
+      user.role = (snap.data() as { role?: "admin" | "user" }).role ?? "user";
       return true;
     },
 
