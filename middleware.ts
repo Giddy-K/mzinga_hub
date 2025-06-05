@@ -6,37 +6,23 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
   const { pathname } = req.nextUrl;
 
-  // No token – redirect to login
+  // 🔐 Require login for protected paths
   if (!token && (pathname.startsWith("/admin") || pathname.startsWith("/user"))) {
     return NextResponse.redirect(new URL("/account", req.url));
   }
 
-  // Redirect to home if role mismatch
+  // 🔒 Admin-only routes
   if (pathname.startsWith("/admin") && token?.role !== "admin") {
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/unauthorized", req.url));
   }
 
+  // 🔒 User-only routes
   if (pathname.startsWith("/user") && token?.role !== "user") {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
-
-  // Handle /admin/dashboard
-  if (pathname.startsWith('/admin')) {
-    if (token?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/unauthorized', req.url))
-    }
-  }
-
-  // Handle /user/dashboard
-  if (pathname.startsWith('/user')) {
-    if (token?.role !== 'user') {
-      return NextResponse.redirect(new URL('/unauthorized', req.url))
-    }
+    return NextResponse.redirect(new URL("/unauthorized", req.url));
   }
 
   return NextResponse.next();
 }
-
 
 export const config = {
   matcher: ["/admin/:path*", "/user/:path*"],
