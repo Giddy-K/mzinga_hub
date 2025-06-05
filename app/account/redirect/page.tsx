@@ -35,12 +35,16 @@ export default async function RedirectPage() {
     redirect("/unauthorized");
   }
 
-  if (session.user.role === "admin") {
-    redirect("/admin/dashboard");
-  } else if (session.user.role === "user") {
-    redirect("/");
-  } else {
-    redirect("/unauthorized");
-  }
-}
+  // Avoid redirecting in a loop
+  const role = session.user.role;
 
+  if (role === "admin") {
+    redirect("/admin/dashboard");
+  }
+
+  if (role === "user") {
+    redirect("/");
+  }
+
+  redirect("/unauthorized");
+}
