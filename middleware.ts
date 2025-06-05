@@ -6,17 +6,11 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
   const { pathname } = req.nextUrl;
 
-  // If there's no token and the user is trying to access protected routes
-  if (!token && (pathname.startsWith("/admin") || pathname.startsWith("/user"))) {
+  if (!token && pathname.startsWith("/admin")) {
     return NextResponse.redirect(new URL("/account", req.url));
   }
 
-  // If token exists but role mismatch
-  if (pathname.startsWith("/admin") && token?.role !== "admin") {
-    return NextResponse.redirect(new URL("/unauthorized", req.url));
-  }
-
-  if (pathname.startsWith("/user") && token?.role !== "user") {
+  if (pathname.startsWith("/admin") && token.role !== "admin") {
     return NextResponse.redirect(new URL("/unauthorized", req.url));
   }
 
@@ -24,5 +18,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/user/:path*"],
+  matcher: ["/admin/:path*"],
 };
