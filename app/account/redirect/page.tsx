@@ -11,7 +11,7 @@ export default function RedirectPage() {
 
   useEffect(() => {
     if (status === "loading") return;
-
+    console.log("SESSION IN REDIRECT:", session); // ⬅️ Add this
     if (session?.user?.email) {
       checkUserRoleAndRedirect(session.user.email, router);
     } else {
