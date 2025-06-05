@@ -1,32 +1,47 @@
-"use client";
+// "use client";
 
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import FullScreenLoader from "@/app/components/FullScreenLoader";
+// import { useSession } from "next-auth/react";
+// import { useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import FullScreenLoader from "@/app/components/FullScreenLoader";
 
-export default function RedirectPage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+// export default function RedirectPage() {
+//   const { data: session, status } = useSession();
+//   const router = useRouter();
 
-  useEffect(() => {
-    if (status === "loading") return;
+//   // Show loader while session is loading
+//   if (status === "loading") return <FullScreenLoader />;
 
-    const role = session?.user?.role;
+//   useEffect(() => {
+//     if (!session || !session.user?.role) {
+//       router.replace("/unauthorized");
+//     } else if (session.user.role === "admin") {
+//       router.replace("/admin/dashboard");
+//     } else {
+//       router.replace("/");
+//     }
+//   }, [session, router]);
 
-    if (!role) {
-      console.warn("No role found in session");
-      return router.replace("/unauthorized");
-    }
+//   return <FullScreenLoader />;
+// }
 
-    if (role === "admin") {
-      router.replace("/admin/dashboard");
-    } else if (role === "user") {
-      router.replace("/");
-    } else {
-      router.replace("/unauthorized");
-    }
-  }, [session, status, router]);
+// app/account/redirect/page.tsx
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-  return <FullScreenLoader />;
+export default async function RedirectPage() {
+  const session = await auth();
+
+  const role = session?.user?.role;
+
+  if (role === "admin") {
+    redirect("/admin/dashboard");
+  }
+
+  if (role === "user") {
+    redirect("/");
+  }
+
+  redirect("/unauthorized");
 }
+
