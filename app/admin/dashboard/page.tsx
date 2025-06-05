@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+// import { auth } from "@/auth";
 import GoToTop from "../../components/GoToTop";
 import Link from "next/link";
 import {
@@ -11,9 +11,12 @@ import {
 } from "react-icons/fa";
 import AdminNavbar from "@/app/components/AdminNavbar";
 import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+
 
 export default async function AdminDashboard() {
   const session = await auth();
+
 
   if (session?.user?.role !== "admin") {
     redirect("/unauthorized");
