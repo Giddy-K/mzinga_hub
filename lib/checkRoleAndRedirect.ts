@@ -10,6 +10,8 @@ export async function checkUserRoleAndRedirect(
     const docRef = doc(db, "users", email);
     const docSnap = await getDoc(docRef);
 
+    console.log("🔍 Checking role for:", email);
+
     if (docSnap.exists()) {
       const role = docSnap.data().role;
       console.log("Firestore Role:", role);
@@ -19,9 +21,11 @@ export async function checkUserRoleAndRedirect(
       } else if (role === "user") {
         router.push("/");
       } else {
+        
         router.push("/unauthorized");
       }
     } else {
+      console.warn("⚠️ No user doc found");
       console.log("No such user document!");
       router.push("/unauthorized");
     }
