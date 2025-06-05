@@ -14,13 +14,13 @@ export default function AccountPage() {
     if (status === "loading") return;
 
     if (session?.user?.role === "admin") {
-      router.push("/admin/dashboard");
+      router.replace("/admin/dashboard");
     } else if (session?.user?.role === "user") {
-      router.push("/");
+      router.replace("/");
     } else {
-      setShowForm(true); // Only show form if not authenticated
+      setShowForm(true);
     }
-  }, [status, session, router]);
+  }, [session, status, router]);
 
   return showForm ? <LoginForm /> : <div>Checking session...</div>;
 }
