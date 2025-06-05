@@ -112,10 +112,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
 
-    async redirect({ baseUrl, url }) {
-      console.log("REDIRECT to:", url);
-      return `${baseUrl}/account/redirect`;
-    },
+    // async redirect({ baseUrl, url }) {
+    //   console.log("REDIRECT to:", url);
+    //   return `${baseUrl}/account/redirect`;
+    // },
 
   },
 
