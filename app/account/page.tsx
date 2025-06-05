@@ -22,7 +22,7 @@ export default function AccountPage() {
     }
   }, [session, status, router]);
 
-  return showForm ? <LoginForm /> : <div>Checking session...</div>;
+  return showForm ? <LoginForm /> : router.push("/admin/dashboard");
 }
 
 // // app/account/page.tsx
