@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Head from "next/head";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
@@ -54,10 +55,39 @@ const workSans = localFont({
   variable: "--font-work-sans",
 });
 
-
 export const metadata: Metadata = {
-  title: "MzingaHub",
-  description: "Smart Beekeeping Made Simple",
+  title: "MzingaHub | Smart Beekeeping Dashboard",
+  description:
+    "MzingaHub is a powerful beekeeping management tool to help farmers monitor apiaries, manage hives, and improve honey production.",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  keywords: [
+    "beekeeping",
+    "honey production",
+    "hive monitoring",
+    "apiary management",
+    "smart farming",
+    "MzingaHub",
+    "Bazenga",
+  ],
+  openGraph: {
+    title: "MzingaHub",
+    description:
+      "MzingaHub helps beekeepers optimize hive health and track production.",
+    url: "https://mzinga-hub.vercel.app",
+    siteName: "MzingaHub",
+    images: [
+      {
+        url: "/icon.png",
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -67,11 +97,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={workSans.variable}
-      >
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+      </Head>
+      <body className={workSans.variable}>
         <SessionProvider>
-        {/* <RedirectOnLogin /> */}
+          {/* <RedirectOnLogin /> */}
           {children}
         </SessionProvider>
       </body>

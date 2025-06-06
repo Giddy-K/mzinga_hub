@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mzinga-hub.vercel.app/sitemap.xml
