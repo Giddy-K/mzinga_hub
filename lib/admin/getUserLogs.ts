@@ -34,7 +34,6 @@ export async function getUserLogs(userId: string): Promise<UserLog[]> {
     }
     console.log("[getUserLogs] Fetching logs for:", userId);
     console.log("[getUserLogs] Raw logs:", snap.docs.map(d => d.data()));
-    
 
     return {
       action: data.action,
