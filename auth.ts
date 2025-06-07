@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { logUserAction } from "./lib/admin/logUserAction";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
@@ -44,47 +45,55 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           role: "user",
           createdAt: new Date(),
         });
+        await logUserAction({
+          userId: email,
+          action: "Account created",
+        });
 
         return { id: email, email, name };
       },
     }),
   ],
-callbacks: {
-  async signIn({ user }) {
-    if (!user.email) return false;
+  callbacks: {
+    async signIn({ user }) {
+      if (!user.email) return false;
 
-    const ref = doc(db, "users", user.email);
-    const snap = await getDoc(ref);
+      const ref = doc(db, "users", user.email);
+      const snap = await getDoc(ref);
 
-    // If user doesn't exist in Firestore, create them
-    if (!snap.exists()) {
-      await setDoc(ref, {
-        email: user.email,
-        name: user.name ?? user.email,
-        role: "user", // or "admin" manually later
-        createdAt: new Date(),
+      // If user doesn't exist in Firestore, create them
+      if (!snap.exists()) {
+        await setDoc(ref, {
+          email: user.email,
+          name: user.name ?? user.email,
+          role: "user", // or "admin" manually later
+          createdAt: new Date(),
+        });
+      }
+      await logUserAction({
+        userId: user.email!,
+        action: "Signed in with Google",
       });
-    }
 
-    return true;
-  },
+      return true;
+    },
 
-  async jwt({ token, user }) {
-    if (user?.email) {
-      const snap = await getDoc(doc(db, "users", user.email));
-      const role = snap.data()?.role ?? "user";
-      token.role = role;
-      token.uid = user.email;
-    }
-    return token;
-  },
+    async jwt({ token, user }) {
+      if (user?.email) {
+        const snap = await getDoc(doc(db, "users", user.email));
+        const role = snap.data()?.role ?? "user";
+        token.role = role;
+        token.uid = user.email;
+      }
+      return token;
+    },
 
-  async session({ session, token }) {
-    session.user.role = token.role as "admin" | "user";
-    session.user.uid = token.uid as string;
-    return session;
+    async session({ session, token }) {
+      session.user.role = token.role as "admin" | "user";
+      session.user.uid = token.uid as string;
+      return session;
+    },
   },
-},
 
   pages: {
     signIn: "/account",
