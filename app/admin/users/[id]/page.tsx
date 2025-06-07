@@ -4,11 +4,11 @@ import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>; // ❗ Correct type — must be a Promise
 }
 
 export default async function AdminUserLogsPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params; // ❗ Await the params object
 
   const session = await auth();
   if (session?.user?.role !== "admin") return notFound();
