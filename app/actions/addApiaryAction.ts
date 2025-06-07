@@ -1,6 +1,8 @@
 'use server';
 
 import { adminDB } from "@/lib/firebase-admin";
+import { logUserAction } from "@/lib/admin/logUserAction";
+import { auth } from "@/auth";
 
 export async function addApiaryAction(data: {
   title: string;
@@ -10,11 +12,19 @@ export async function addApiaryAction(data: {
   ownerEmail: string;
   ownerId: string;
 }) {
+  const session = await auth(); // ✅ get session
+  const userId = session?.user?.email ?? "unknown";
+
   await adminDB.ref("apiaries").push({
     ...data,
     dateAdded: Date.now(),
   });
 
-  // Just return success — no redirect
+  await logUserAction({
+    userId,
+    action: "Created new apiary",
+    details: `Apiary name: ${data.title}`,
+  });
+
   return { success: true };
 }
