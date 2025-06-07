@@ -27,7 +27,7 @@ export async function getAllUsers(): Promise<AdminUser[]> {
         : Date.now(); // fallback if missing
 
     return {
-      id: doc.id,
+      id: data.email,
       name: data.name ?? "",
       email: data.email ?? "",
       role: (data.role ?? "user") as "admin" | "user",
