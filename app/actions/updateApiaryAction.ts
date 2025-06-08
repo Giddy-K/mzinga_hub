@@ -18,5 +18,5 @@ export async function updateApiaryAction(id: string, updatedData: ApiaryUpdateDa
     details: `Apiary name: ${updatedData.title}`,
   });
 
-  redirect(`/apiaries/dashboard`);
+  redirect(`/account/redirect`);
 }
