@@ -11,13 +11,16 @@ export async function generateMetadata(
   };
 }
 
-export default async function AdminUserLogsPage(
-  { params }: { params: { id: string } }
-) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function AdminUserLogsPage({ params }: PageProps) {
+  const { id } = await params; // ✅ Await the Promise
   const session = await auth();
   if (session?.user?.role !== "admin") return notFound();
 
-  const userId = decodeURIComponent(params.id);
+  const userId = decodeURIComponent(id);
   const logs = await getUserLogs(userId);
 
   if (!logs.length) {
@@ -37,18 +40,9 @@ export default async function AdminUserLogsPage(
             key={i}
             className="border p-4 rounded-lg shadow-sm bg-gray-50 text-sm text-gray-800"
           >
-            <p>
-              <strong>Action:</strong> {log.action}
-            </p>
-            <p>
-              <strong>Timestamp:</strong>{" "}
-              {new Date(log.timestamp).toLocaleString()}
-            </p>
-            {log.details && (
-              <p>
-                <strong>Details:</strong> {log.details}
-              </p>
-            )}
+            <p><strong>Action:</strong> {log.action}</p>
+            <p><strong>Timestamp:</strong> {new Date(log.timestamp).toLocaleString()}</p>
+            {log.details && <p><strong>Details:</strong> {log.details}</p>}
           </div>
         ))}
       </div>
