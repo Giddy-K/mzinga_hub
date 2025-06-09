@@ -69,7 +69,7 @@ export default async function AdminUsersPage() {
                     </form>
 
                     <Link
-                      href={`/admin/users/${user.id}`}
+                      href={`/admin/users/${encodeURIComponent(user.email)}`}
                       className="text-amber-600 hover:underline text-sm"
                     >
                       View Logs

@@ -1,18 +1,17 @@
-// app/admin/users/[id]/page.tsx
+// ✅ FIXED: app/admin/users/[id]/page.tsx
 import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 
-// ✅ Manually define the correct params type without Promise
-type Props = {
-  params: { id: string };
+type PageProps = {
+  params: { id: string }; // ✅ No Promise here
 };
 
-export default async function AdminUserLogsPage({ params }: Props) {
+export default async function AdminUserLogsPage({ params }: PageProps) {
   const session = await auth();
   if (session?.user?.role !== "admin") return notFound();
 
-  const userId = decodeURIComponent(params.id);
+  const userId = decodeURIComponent(params.id); // always decode
   const logs = await getUserLogs(userId);
 
   if (!logs.length) {
