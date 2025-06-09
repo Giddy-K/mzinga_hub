@@ -1,17 +1,27 @@
-// ✅ FIXED: app/admin/users/[id]/page.tsx
 import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
-type PageProps = {
+export async function generateMetadata({
+  params,
+}: {
   params: { id: string };
-};
+}): Promise<Metadata> {
+  return {
+    title: `Logs for ${params.id}`,
+  };
+}
 
-export default async function AdminUserLogsPage({ params }: PageProps) {
+export default async function AdminUserLogsPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const session = await auth();
   if (session?.user?.role !== "admin") return notFound();
-  const { id } = params;
-  const userId = decodeURIComponent(id); // always decode
+
+  const userId = decodeURIComponent(params.id);
   const logs = await getUserLogs(userId);
 
   if (!logs.length) {
@@ -32,8 +42,7 @@ export default async function AdminUserLogsPage({ params }: PageProps) {
             className="border p-4 rounded-lg shadow-sm bg-gray-50 text-sm text-gray-800"
           >
             <p>
-              <strong>Action:</strong> {log.action}
-            </p>
+              <strong>Action:</strong> {log.action}</p>
             <p>
               <strong>Timestamp:</strong>{" "}
               {new Date(log.timestamp).toLocaleString()}
