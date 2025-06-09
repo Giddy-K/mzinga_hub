@@ -2,16 +2,15 @@ import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 
-type PageProps = {
+export default async function AdminUserLogsPage({
+  params,
+}: {
   params: { id: string };
-};
-
-export default async function AdminUserLogsPage({ params }: PageProps) {
+}) {
   const session = await auth();
-
   if (session?.user?.role !== "admin") return notFound();
 
-  const userId = decodeURIComponent(params.id); // if the email is passed as the ID
+  const userId = decodeURIComponent(params.id);
   const logs = await getUserLogs(userId);
 
   if (logs.length === 0) {
