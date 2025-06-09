@@ -1,19 +1,18 @@
-// app/admin/users/[id]/page.tsx
 import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 
-interface PageProps {
+type PageProps = {
   params: { id: string };
-}
+};
 
 export default async function AdminUserLogsPage({ params }: PageProps) {
-  const id = params.id;
-
   const session = await auth();
+
   if (session?.user?.role !== "admin") return notFound();
 
-  const logs = await getUserLogs(id);
+  const userId = decodeURIComponent(params.id); // if the email is passed as the ID
+  const logs = await getUserLogs(userId);
 
   if (logs.length === 0) {
     return (
@@ -25,7 +24,7 @@ export default async function AdminUserLogsPage({ params }: PageProps) {
 
   return (
     <section className="min-h-screen bg-white px-6 py-12">
-      <h1 className="text-2xl font-bold mb-6">Logs for {id}</h1>
+      <h1 className="text-2xl font-bold mb-6">Logs for {userId}</h1>
       <div className="space-y-4">
         {logs.map((log, i) => (
           <div
