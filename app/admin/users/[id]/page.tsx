@@ -13,7 +13,7 @@ export default async function AdminUserLogsPage({
   const userId = decodeURIComponent(params.id);
   const logs = await getUserLogs(userId);
 
-  if (logs.length === 0) {
+  if (!logs.length) {
     return (
       <div className="p-6 text-center text-gray-600">
         No logs found for this user.
