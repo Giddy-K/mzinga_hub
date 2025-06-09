@@ -1,15 +1,6 @@
 import { auth } from "@/auth";
 import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
-
-export async function generateMetadata(
-  { params }: { params: { id: string } }
-): Promise<Metadata> {
-  return {
-    title: `Logs for ${params.id}`,
-  };
-}
 
 interface PageProps {
   params: Promise<{ id: string }>;
