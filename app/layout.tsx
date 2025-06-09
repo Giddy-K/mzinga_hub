@@ -70,7 +70,11 @@ export const metadata: Metadata = {
     "apiary management",
     "smart farming",
     "MzingaHub",
+    "mzinga hub",
     "Bazenga",
+    "Mzinga",
+    "HubMzinga",
+    "smart beekeeping",
   ],
   openGraph: {
     title: "MzingaHub",
