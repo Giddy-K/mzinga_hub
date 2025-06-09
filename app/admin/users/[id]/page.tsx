@@ -3,19 +3,17 @@ import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
-type Params = {
-  params: {
-    id: string;
-  };
-};
-
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+): Promise<Metadata> {
   return {
     title: `Logs for ${params.id}`,
   };
 }
 
-export default async function AdminUserLogsPage({ params }: Params) {
+export default async function AdminUserLogsPage(
+  { params }: { params: { id: string } }
+) {
   const session = await auth();
   if (session?.user?.role !== "admin") return notFound();
 
