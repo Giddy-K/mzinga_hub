@@ -1,15 +1,18 @@
 import { auth } from "@/auth";
 import { getAllUsers } from "@/lib/admin/getAllUsers";
-import { updateUserRole, deleteUser } from "@/lib/admin/userActions";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import AdminNavbar from "@/app/components/AdminNavbar";
+import UserActions from "@/app/components/UserActions";
 
 export default async function AdminUsersPage() {
   const session = await auth();
-  if (session?.user?.role !== "admin") redirect("/unauthorized");
+
+  if (session?.user?.role !== "admin" || !session.user.email) {
+    redirect("/unauthorized");
+  }
 
   const users = await getAllUsers();
+  const currentEmail = session.user.email;
 
   return (
     <>
@@ -33,47 +36,24 @@ export default async function AdminUsersPage() {
             <tbody>
               {users.map((user) => (
                 <tr key={user.id} className="border-b">
-                  <td className="px-4 py-3 font-medium">{user.name}</td>
+                  <td className="px-4 py-3 font-medium">
+                    {user.name} {currentEmail === user.email && "(You)"}
+                  </td>
                   <td className="px-4 py-3">{user.email}</td>
                   <td className="px-4 py-3 text-sm text-gray-700">
-                    {user.role}
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-semibold ${
+                        user.role === "admin" ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {user.role}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-sm">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-3 space-x-2">
-                    {user.role !== "admin" ? (
-                      <form
-                        action={async () => {
-                          "use server";
-                          await updateUserRole(user.id, "admin");
-                          redirect("/admin/users");
-                        }}
-                      >
-                        <button className="text-blue-600 hover:underline text-sm">
-                          Promote
-                        </button>
-                      </form>
-                    ) : null}
-
-                    <form
-                      action={async () => {
-                        "use server";
-                        await deleteUser(user.id);
-                        redirect("/admin/users");
-                      }}
-                    >
-                      <button className="text-red-600 hover:underline text-sm">
-                        Delete
-                      </button>
-                    </form>
-
-                    <Link
-                      href={`/admin/users/${encodeURIComponent(user.email)}`}
-                      className="text-amber-600 hover:underline text-sm"
-                    >
-                      View Logs
-                    </Link>
+                  <td className="px-4 py-3">
+                    <UserActions user={user} currentAdminEmail={currentEmail} />
                   </td>
                 </tr>
               ))}
