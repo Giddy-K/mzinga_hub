@@ -4,14 +4,14 @@ import { getUserLogs } from "@/lib/admin/getUserLogs";
 import { notFound } from "next/navigation";
 
 type PageProps = {
-  params: { id: string }; // ✅ No Promise here
+  params: { id: string };
 };
 
 export default async function AdminUserLogsPage({ params }: PageProps) {
   const session = await auth();
   if (session?.user?.role !== "admin") return notFound();
-
-  const userId = decodeURIComponent(params.id); // always decode
+  const { id } = params;
+  const userId = decodeURIComponent(id); // always decode
   const logs = await getUserLogs(userId);
 
   if (!logs.length) {
