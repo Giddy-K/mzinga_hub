@@ -3,6 +3,7 @@ import Head from "next/head";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import { CookieBanner } from "./components/CookieBanner";
 
 const workSans = localFont({
   src: [
@@ -108,8 +109,8 @@ export default function RootLayout({
       </Head>
       <body className={workSans.variable}>
         <SessionProvider>
-          {/* <RedirectOnLogin /> */}
           {children}
+          <CookieBanner />
         </SessionProvider>
       </body>
     </html>
