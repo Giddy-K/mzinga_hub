@@ -104,11 +104,8 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-screen w-1/2 bg-white/60 backdrop-blur-lg backdrop-saturate-150 shadow-lg transition-transform duration-300 z-50 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
+<div className={`fixed top-0 left-0 h-screen w-1/2 glass-consistent shadow-lg transition-transform duration-300 z-50 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
+
         <div className="flex items-center justify-between px-4 py-4 border-b border-black">
           <Image
             src="/icon.png"
