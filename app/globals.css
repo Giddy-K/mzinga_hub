@@ -160,6 +160,14 @@
   pointer-events: all;
 }
 
+.glass-consistent {
+  background: rgba(255, 255, 255, 0.35);  /* transparent white */
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
 
 /* About Section Styles */
 .about_section {
