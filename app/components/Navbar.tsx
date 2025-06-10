@@ -94,20 +94,20 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Hamburger */}
+        {/* Mobile Hamburger (opens menu only) */}
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(true)}
           className="md:hidden border-black"
         >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
+          <Menu size={28} />
         </button>
       </nav>
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-40 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-white/80 backdrop-blur-md shadow-lg transform transition-all duration-300 ease-in-out z-40 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } overflow-y-auto`}
       >
         <div className="flex items-center justify-between px-4 py-4 border-b">
           <Image
@@ -117,10 +117,12 @@ export default function Navbar() {
             height={48}
             className="rounded-full border border-black"
           />
-          <button onClick={() => setIsOpen(false)}>
+          {/* Single X icon to close the menu */}
+          <button onClick={() => setIsOpen(false)} className="md:hidden">
             <X size={28} />
           </button>
         </div>
+
         <ul className="p-6 flex flex-col gap-4 text-[#4B2E13] font-medium">
           {navItems.map((item, idx) => (
             <Link href={item.href} key={idx} onClick={() => setIsOpen(false)}>
