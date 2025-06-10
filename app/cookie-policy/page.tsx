@@ -36,7 +36,7 @@ export default function CookiePolicyPage() {
 
       <h2 className="text-xl font-semibold mt-6">Contact Us</h2>
       <p>
-        If you have any questions about our use of cookies, contact us at: <a href="mailto:support@mzingahub.com" className="underline text-blue-600">support@mzingahub.com</a>
+        If you have any questions about our use of cookies, contact us at: <a href="mailto:hubmzinga@gmail.com" className="underline text-blue-600">support@mzingahub.com</a>
       </p>
     </main>
   );
