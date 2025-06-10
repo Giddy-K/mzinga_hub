@@ -235,6 +235,17 @@ const Footer = () => {
             </Link>{" "}
             - MzingaHub Team. All Rights Reserved
           </p>
+          <div className="mt-4 text-sm text-gray-300">
+            <Link href="/privacy-policy" className="hover:text-amber-300 mr-4">
+              Privacy Policy
+            </Link>
+            <Link href="/terms-of-service" className="hover:text-amber-300">
+              Terms of Service
+            </Link>
+            <Link href="/cookie-policy" className="hover:text-amber-300">
+              Cookie Policy
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
