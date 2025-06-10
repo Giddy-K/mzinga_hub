@@ -72,7 +72,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Our Links Column */}
+          {/* Our Links Column
           <div>
             <h3 className="footer-list-title text-lg font-semibold mb-4">
               Our Links
@@ -96,6 +96,24 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
+          </div> */}
+
+          {/* Our Location Map Column */}
+          <div>
+            <h3 className="footer-list-title text-lg font-semibold mb-4">
+              Our Location
+            </h3>
+            <div className="rounded-lg overflow-hidden border border-white">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.220231723653!2d36.7085523!3d-1.4135246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f077b77a4f069%3A0x664756663f97ebce!2sSparrow's%20Creek%20eco%20camp%20and%20tours%20ltd!5e0!3m2!1sen!2ske!4v1718012345678!5m2!1sen!2ske"
+                width="100%"
+                height="200"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
           </div>
 
           {/* Our Partners Column */}
@@ -239,7 +257,10 @@ const Footer = () => {
             <Link href="/privacy-policy" className="hover:text-amber-300 mr-4">
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="hover:text-amber-300 mr-4">
+            <Link
+              href="/terms-of-service"
+              className="hover:text-amber-300 mr-4"
+            >
               Terms of Service
             </Link>
             <Link href="/cookie-policy" className="hover:text-amber-300">
