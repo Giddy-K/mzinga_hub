@@ -1,6 +1,6 @@
 "use client";
 
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer.jsx";
 import GoToTop from "../components/GoToTop";
@@ -11,6 +11,14 @@ import Image from "next/image";
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState("");
+
+  useEffect(() => {
+    if (showPopup) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [showPopup]);
 
   const openPopup = (type: SetStateAction<string>) => {
     setPopupType(type);
@@ -23,7 +31,7 @@ export default function Home() {
 
   const { ref, inView } = useInView({
     triggerOnce: true, // Only trigger once when in view
-    threshold: 0.3,     // How much of the element should be visible
+    threshold: 0.3, // How much of the element should be visible
   });
 
   const programs = [
@@ -130,25 +138,30 @@ export default function Home() {
               </li>
             </ul>
             <ul ref={ref} className="flex flex-wrap gap-6">
-      <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
-        <p className="text-3xl font-bold text-amber-600">
-          {inView ? <CountUp end={300} duration={2} /> : "0"}+
-        </p>
-        <p className="text-gray-600">Farms Visited</p>
-      </li>
-      <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
-        <p className="text-3xl font-bold text-amber-600">
-          {inView ? <CountUp end={5000} duration={3} separator="," /> : "0"}+
-        </p>
-        <p className="text-gray-600">Farmers Reached</p>
-      </li>
-      <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
-        <p className="text-3xl font-bold text-amber-600">
-          {inView ? <CountUp end={3} duration={1.5} /> : "0"}
-        </p>
-        <p className="text-gray-600">Years Completed</p>
-      </li>
-    </ul>
+              <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
+                <p className="text-3xl font-bold text-amber-600">
+                  {inView ? <CountUp end={300} duration={2} /> : "0"}+
+                </p>
+                <p className="text-gray-600">Farms Visited</p>
+              </li>
+              <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
+                <p className="text-3xl font-bold text-amber-600">
+                  {inView ? (
+                    <CountUp end={5000} duration={3} separator="," />
+                  ) : (
+                    "0"
+                  )}
+                  +
+                </p>
+                <p className="text-gray-600">Farmers Reached</p>
+              </li>
+              <li className="stats_card bg-amber-50 p-6 rounded-lg text-center min-w-[120px]">
+                <p className="text-3xl font-bold text-amber-600">
+                  {inView ? <CountUp end={3} duration={1.5} /> : "0"}
+                </p>
+                <p className="text-gray-600">Years Completed</p>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -162,11 +175,11 @@ export default function Home() {
           </h2>
 
           <div className="flex flex-wrap justify-center gap-8">
-  {programs.map((program, index) => (
-    <div
-      key={index}
-      className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-    >
+            {programs.map((program, index) => (
+              <div
+                key={index}
+                className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)] bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+              >
                 <div className="card_icon mb-4">
                   <Image
                     src={program.icon}
@@ -303,8 +316,8 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-gray-600 italic">
-                    &quot;The training from MzingaHub completely transformed how I
-                    manage my apiary. My production has doubled!&quot;
+                    &quot;The training from MzingaHub completely transformed how
+                    I manage my apiary. My production has doubled!&quot;
                   </p>
                   <p className="text-gray-800 font-medium mt-3">
                     [Name], [Farm Name]
@@ -322,9 +335,9 @@ export default function Home() {
             </p>
 
             <p className="text-gray-600 mb-12">
-              But don&apos;t just take our word for it. Here are some testimonials
-              from Farmers, neighbouring communities and partners who have seen
-              the impact of Mzinga Hub&apos;s programs:
+              But don&apos;t just take our word for it. Here are some
+              testimonials from Farmers, neighbouring communities and partners
+              who have seen the impact of Mzinga Hub&apos;s programs:
             </p>
           </div>
 
@@ -350,8 +363,8 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-gray-600 italic">
-                    &quot;As a community leader, I&apos;ve seen how MzingaHub has brought
-                    new economic opportunities to our area.&quot;
+                    &quot;As a community leader, I&apos;ve seen how MzingaHub
+                    has brought new economic opportunities to our area.&quot;
                   </p>
                   <p className="text-gray-800 font-medium mt-3">
                     [Name], Community Leader
@@ -382,7 +395,8 @@ export default function Home() {
                 <div>
                   <p className="text-gray-600 italic">
                     &quot;Partnering with MzingaHub has allowed us to scale our
-                    conservation efforts while supporting local livelihoods.&quot;
+                    conservation efforts while supporting local
+                    livelihoods.&quot;
                   </p>
                   <p className="text-gray-800 font-medium mt-3">
                     [Name], Conservation Partner
@@ -411,9 +425,9 @@ export default function Home() {
               <p className="text-gray-600 mb-6">
                 At Mzinga Hub, we welcome passionate individuals ready to drive
                 change through innovation and community engagement. Whether
-                you&apos;re a mentor, educator, tech enthusiast, or someone eager to
-                uplift young minds, your contribution can create a lasting
-                impact.
+                you&apos;re a mentor, educator, tech enthusiast, or someone
+                eager to uplift young minds, your contribution can create a
+                lasting impact.
               </p>
               <button
                 onClick={() => openPopup("volunteer")}
@@ -461,6 +475,25 @@ export default function Home() {
                 Contact Us
               </button>
             </div>
+
+            {/* Adopt a Hive Card */}
+            <div className="involve_card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Adopt a Hive
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Support sustainable beekeeping by adopting a hive or apiary.
+                Your support enables young farmers to learn and earn through
+                eco-friendly practices that nurture both the environment and
+                livelihoods.
+              </p>
+              <button
+                onClick={() => openPopup("adopt")}
+                className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded transition duration-300"
+              >
+                Get Started
+              </button>
+            </div>
           </div>
 
           <div className="max-w-3xl mx-auto text-center">
@@ -476,18 +509,35 @@ export default function Home() {
 
       {/* Popup */}
       {showPopup && (
-        <div className="popup_overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="popup bg-white p-8 rounded-lg max-w-md w-full mx-4">
+        <div className="popup_overlay fixed inset-0 z-[9999] bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="popup bg-white p-8 rounded-lg max-w-md w-full mx-4 shadow-lg relative z-[10000]">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
               {popupType === "volunteer" && "Apply as a Volunteer"}
               {popupType === "donate" && "Make a Donation"}
               {popupType === "partner" && "Partner With Us"}
+              {popupType === "adopt" && "Adopt a Hive or Apiary"}
             </h3>
             <p className="text-gray-600 mb-6">
               Please fill out the form below:
             </p>
 
-            <form className="popup_form space-y-4">
+            <form
+              action="https://formspree.io/f/movwepop"
+              method="POST"
+              className="popup_form space-y-4"
+            >
+              {/* Hidden fields */}
+              <input
+                type="hidden"
+                name="_subject"
+                value="New Mzinga Hub Inquiry"
+              />
+              <input
+                type="hidden"
+                name="_next"
+                value="https://mzinga-hub.vercel.app//thank-you"
+              />
+              {/* User input fields */}
               <div>
                 <label htmlFor="name" className="block text-gray-700 mb-1">
                   Name
