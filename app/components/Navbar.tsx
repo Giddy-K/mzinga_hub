@@ -33,7 +33,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 w-full transition-all duration-300 ease-in-out font-work-sans z-[100] ${
-        scrolled ? "bg-white shadow-md backdrop-blur-md" : "bg-transparent"
+        scrolled ? "bg-white/30 backdrop-blur-md shadow-md" : "bg-transparent"
       }`}
     >
       <nav className="flex justify-between items-center px-6 py-3">
@@ -97,7 +97,7 @@ export default function Navbar() {
         {/* Mobile Hamburger (opens menu only) */}
         <button
           onClick={() => setIsOpen(true)}
-          className="md:hidden border-black"
+          className="md:hidden text-black"
         >
           <Menu size={28} />
         </button>
@@ -105,11 +105,11 @@ export default function Navbar() {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white/80 backdrop-blur-md shadow-lg transform transition-all duration-300 ease-in-out z-40 ${
+        className={`fixed top-0 left-0 h-screen w-1/2 bg-white/30 backdrop-blur-lg shadow-lg transition-transform duration-300 z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } overflow-y-auto`}
+        }`}
       >
-        <div className="flex items-center justify-between px-4 py-4 border-b">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-black">
           <Image
             src="/icon.png"
             alt="Mzinga Logo"
@@ -117,8 +117,8 @@ export default function Navbar() {
             height={48}
             className="rounded-full border border-black"
           />
-          {/* Single X icon to close the menu */}
-          <button onClick={() => setIsOpen(false)} className="md:hidden">
+          {/* Close menu */}
+          <button onClick={() => setIsOpen(false)}>
             <X size={28} />
           </button>
         </div>
@@ -133,7 +133,7 @@ export default function Navbar() {
           {session?.user ? (
             <>
               <Link href="/apiaries/dashboard" onClick={() => setIsOpen(false)}>
-                <button className="w-full px-4 py-2 bg-gradient-to-r from-[#4B2E13] to-[#B76E29] text-white rounded-full">
+                <button className="w-full px-4 py-2 mt-2 bg-gradient-to-r from-[#4B2E13] to-[#B76E29] text-white rounded-full">
                   Manage Apiaries
                 </button>
               </Link>
@@ -143,7 +143,7 @@ export default function Navbar() {
                   setIsOpen(false);
                   signOut({ redirectTo: "/" });
                 }}
-                className="w-full px-4 py-2 bg-red-600 text-white rounded-full"
+                className="w-full px-4 py-2 mt-2 bg-red-600 text-white rounded-full"
               >
                 Log Out
               </button>
@@ -151,7 +151,7 @@ export default function Navbar() {
               <Link
                 href={`/user/${session.user.email}`}
                 onClick={() => setIsOpen(false)}
-                className="mt-2 self-start"
+                className="mt-4"
               >
                 <Image
                   src={session.user.image || "/profile.png"}
@@ -164,7 +164,7 @@ export default function Navbar() {
             </>
           ) : (
             <Link href="/account" onClick={() => setIsOpen(false)}>
-              <button className="w-full px-6 py-2 bg-gradient-to-r from-[#4B2E13] to-[#B76E29] text-white rounded-full mt-4">
+              <button className="w-full px-6 py-2 mt-4 bg-gradient-to-r from-[#4B2E13] to-[#B76E29] text-white rounded-full">
                 Access Account
               </button>
             </Link>
