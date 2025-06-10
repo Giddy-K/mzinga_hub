@@ -26,7 +26,7 @@ const Footer = () => {
             <ul className="flex space-x-4">
               <li>
                 <Link
-                  href="#"
+                  href="https://www.facebook.com/mzingahub"
                   className="social-link hover:text-amber-300 transition"
                 >
                   <svg
@@ -41,7 +41,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="https://www.instagram.com/iselenken/"
+                  href="https://www.instagram.com/mzingahub"
                   className="social-link hover:text-amber-300 transition"
                 >
                   <svg
@@ -56,8 +56,9 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="https://twitter.com/mxingahub"
+                  href="https://x.com/mzingahub"
                   className="social-link hover:text-amber-300 transition"
+                  aria-label="X (formerly Twitter)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +66,7 @@ const Footer = () => {
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+                    <path d="M14.96 12.48 23.25 2h-2.19l-7.05 8.6L8.03 2H.75l8.7 12.44L.75 22h2.19l7.39-9.01L16.47 22h7.03l-8.54-9.52z" />
                   </svg>
                 </Link>
               </li>
@@ -105,13 +106,14 @@ const Footer = () => {
             </h3>
             <div className="rounded-lg overflow-hidden border border-white">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.220231723653!2d36.7085523!3d-1.4135246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f077b77a4f069%3A0x664756663f97ebce!2sSparrow's%20Creek%20eco%20camp%20and%20tours%20ltd!5e0!3m2!1sen!2ske!4v1718012345678!5m2!1sen!2ske"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.220231723653!2d36.7085523!3d-1.4135246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f077b77a4f069%3A0x664756663f97ebce!2sSparrow's%20Creek%20Eco%20Camp%20and%20Tours%20Ltd!5e0!3m2!1sen!2ske!4v1718012345678!5m2!1sen!2ske"
                 width="100%"
                 height="200"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                title="Sparrow's Creek Eco Camp Location"
               ></iframe>
             </div>
           </div>
