@@ -105,7 +105,7 @@ export default function Navbar() {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-screen w-1/2 bg-white/30 backdrop-blur-lg shadow-lg transition-transform duration-300 z-50 ${
+        className={`fixed top-0 left-0 h-screen w-1/2 bg-white/60 backdrop-blur-lg backdrop-saturate-150 shadow-lg transition-transform duration-300 z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
