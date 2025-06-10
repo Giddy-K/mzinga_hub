@@ -535,7 +535,7 @@ export default function Home() {
               <input
                 type="hidden"
                 name="_next"
-                value="https://mzinga-hub.vercel.app//thank-you"
+                value="https://mzinga-hub.vercel.app/thank-you"
               />
               {/* User input fields */}
               <div>
