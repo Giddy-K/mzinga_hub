@@ -32,11 +32,14 @@ export async function getUserLogs(userId: string): Promise<UserLog[]> {
     } else if (typeof data.timestamp === "number") {
       millis = data.timestamp;
     }
-
+    console.log("[getUserLogs] Fetching logs for:", userId);
+    console.log("[getUserLogs] Raw logs:", snap.docs.map(d => d.data()));
+    
     return {
       action: data.action,
       timestamp: millis,
       details: data.details ?? "",
     };
+
   });
 }
